@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-// import App from './App';
-import Home from './home'
 
-ReactDOM.render(<Home />, document.getElementById('root'));
+//默认css样式
+import './index.css';
+import App from './views/App'
+
+
+ReactDOM.render(<App />, document.getElementById('root'));
 

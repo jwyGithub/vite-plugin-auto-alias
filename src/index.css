@@ -1,13 +1,96 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+body,ol,ul,h1,h2,h3,h4,h5,h6,p,dl,dd,fieldset,legend,input,textarea,select {
+    margin:0;padding:0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body{
+    font-size:12px;
+    word-wrap:break-word;/*单词换行*/
+    font-family: 'Heiti, Heiti SC, DroidSans, DroidSansFallback, Arial, "Microsoft YaHei"';
+}
+html,body{
+    height:100%;
+    width:100%
+}
+/* 去掉线 */
+a,u,s,del{
+    color:#666;
+    text-decoration:none
+} 
+
+/* 去掉边框 */
+fieldset ,a img,.bor0 {
+    border:0;
+}
+
+/* 去掉默认属性 */
+i,em,b{
+    font-style:normal;
+    font-weight:100;
+}
+
+/* 去掉上下结构时img下面的空隙 */
+img{
+    vertical-align:middle;
+}
+/* 合并相邻边框(细线边框) */
+table{
+    border-collapse:collapse;
+}
+
+/* 首行缩进2em */
+.ind2{
+    text-indent:2em;
+}
+
+/* 去除前面点 */
+li {
+    list-style: none;
+}
+
+/* 单行文本溢出 */
+.overonly {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* 多行文本溢出 */
+.overmore {
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+
+/* 图片居中 */
+.valign{
+    text-align: center;
+}
+.valign img{
+    vertical-align: middle;
+}
+.valign::after{
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    content: "";
+}
+
+/* 解决margin-top向上传递问题 */
+.clearfix::before{
+    content: "";
+    display: table;
+}
+
+/* 清除浮动 */
+.clearfix::after{
+    content: "";
+    clear: both;
+}
+
+/* 去除img的边框 */
+.clearimg{
+    display: block;
 }
