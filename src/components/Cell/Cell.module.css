@@ -1,0 +1,11 @@
+.cell{
+    display: flex;
+
+}
+.cell img{
+    width: 15%;
+}
+
+.con{
+    background: red;
+}

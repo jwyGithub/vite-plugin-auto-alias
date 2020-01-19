@@ -1,7 +1,10 @@
 body,ol,ul,h1,h2,h3,h4,h5,h6,p,dl,dd,fieldset,legend,input,textarea,select {
     margin:0;padding:0;
 }
-
+body,html{
+    width: 100%;
+    height: 100%;
+}
 body{
     font-size:12px;
     word-wrap:break-word;/*单词换行*/
@@ -94,3 +97,4 @@ li {
 .clearimg{
     display: block;
 }
+
