@@ -4,6 +4,7 @@ import Header from "../components/Header/Header";
 import Footer from '../components/Footer/Footer'
 import style from './App.module.scss'
 import Chat from './Chat/Chat.js'
+import My from '../views/My/My.js'
 
 
 export default class App extends Component {
@@ -13,6 +14,7 @@ export default class App extends Component {
                 <Header />
                 <Switch>
                     <Route path="/chat" component={Chat} />
+                    <Route path="/my" component={My} />
                     <Redirect exact from="/" to="/chat" />
                     {/* <Route component={NoPage} /> */}
                 </Switch>
