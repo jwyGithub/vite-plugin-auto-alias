@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import styles from './Chat.module.scss'
 import Cell from "../../components/Cell/Cell.js";
+// import socket from '../../utils/io'
+import axios from 'axios'
 export default class Chat extends Component {
 
     state = {
@@ -25,11 +27,11 @@ export default class Chat extends Component {
 
     render() {
         return (
-            <div className={styles.chat}>
+            <div className={ styles.chat }>
                 <ul>
                     {
                         this.state.data.map(item =>
-                            <li key={item.id}><Cell data={item} userInfo={this.getUserinfo} msgInfo={this.getMsginfo}/></li>
+                            <li key={ item.id }><Cell data={ item } userInfo={ this.getUserinfo } msgInfo={ this.getMsginfo } /></li>
                         )
                     }
                 </ul>
@@ -38,12 +40,25 @@ export default class Chat extends Component {
     }
 
 
-    getUserinfo = (data,event) => {
+    getUserinfo = (data, event) => {
         event.preventDefault()
-        console.log('获取用户信息',data)
+        console.log('获取用户信息', data)
     }
 
     getMsginfo = (data) => {
-        console.log('获取聊天信息',data)
+        console.log('获取聊天信息', data)
+        this.props.history.push('/chat/chatinfo')
+     
+        axios({
+            url:"http://localhost:3001/react/chat",
+            method: 'post', 
+            headers: {'token': '1232'},
+        })
+
+
+        // socket.on('mess_type', (data) => {
+        //     console.log('首页_客户端收到', data)
+        //     //dom 操作
+        // })
     }
 }

@@ -1,0 +1,50 @@
+.my{
+    ul{
+        li{
+            font-size: 14px;
+            padding: 5px 20px;
+            display: flex;    
+            align-items: center;    
+            line-height: 30px;   
+            border-bottom: 1px solid #eee;
+        i{
+                width: 20px;
+                height: 20px;
+                background-size: cover;
+                margin-right: 10px;
+                vertical-align: middle;
+            }
+            &:nth-child(1){
+                i{
+                    background-image: url('./imgs/pay.png');
+                }
+            }
+            &:nth-child(2){
+                i{
+                    background-image: url('./imgs/collection.png');
+                }
+            }
+            &:nth-child(3){
+                i{
+                    background-image: url('./imgs/xc.png');
+                }
+            }
+            &:nth-child(4){
+                i{
+                    background-image: url('./imgs/kb.png');
+                }
+            }
+            &:nth-child(5){
+                i{
+                    background-image: url('./imgs/bq.png');
+                }
+            }
+            &:nth-child(6){
+                i{
+                    background-image: url('./imgs/sz.png');
+                }
+            }
+       
+        }
+    }
+}
