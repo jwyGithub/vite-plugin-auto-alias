@@ -1,0 +1,9 @@
+export const FOOTER_STATUS = 'footerStatus';
+export const SHOW_FOOTER = 'ShowFooter';
+export const USER_INFO = 'UserInfo';
+export const ADD_INFO = 'AddInfo';
+export const ACTION_LIST = 'ActionList';
+export const OPEN_ID = 'OpenId';
+export const OTHER_ID = 'OtherId';
+export const GET_FRIENDS_LISTS = 'Get_Friends_Lists';
+export const ADD_BOOK = 'Add_Book';

@@ -1,35 +1,44 @@
 import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import Footer from '../components/Footer/Footer'
 import style from './App.module.scss'
+import Footer from '../components/Footer/Footer'
+
 import Chat from './Chat/Chat.js'
 import Actions from './Actions/Actions.js'
 import My from '../views/My/My.js'
 import ChatInfo from './Chat/ChatInfo/ChatInfo.js'
 import Login from './Login/Login'
 import Reg from './Reg/Reg'
+import Home from './Home/home'
+import Detail from "../components/Detail/Detail";
+import Search from '../components/Search/Search'
+import Info from './Info/Info'
 import store from '../store/store'
+import { FooterStatus, ShowFooter } from '../store/actionCreators'
 
-export default class App extends Component {
+
+class App extends Component {
     constructor(props) {
         super(props)
         store.subscribe(this.storeChange)
     }
     render() {
         return (
-            <div className={ style.app }>
+            <div className={style.app}>
                 <Switch>
-                    <Route exact path="/chat" component={ Chat } />
-                    <Route path="/chat/chatinfo" component={ ChatInfo } />
-                    <Route path="/actions" component={ Actions } />
-                    <Route path="/my" component={ My } />
-                    <Route path="/login" component={ Login } />
-                    <Route path="/reg" component={ Reg } />
+                    <Route exact path="/chat" component={Chat} />
+                    <Route path="/chat/chatinfo" component={ChatInfo} />
+                    <Route path="/actions" component={Actions} />
+                    <Route path="/my" component={My} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/reg" component={Reg} />
+                    <Route exact path="/home" component={Home} />
+                    <Route exact path="/home/search" component={Search} />
+                    <Route path="/home/search/userinfo" component={Info} />
+                    <Route path="/detail" component={Detail} />
                     <Redirect exact from="/" to="/login" />
-                    {/* <Route component={NoPage} /> */ }
                 </Switch>
-                { store.getState().isShowFooter ? <Footer /> : '' }
-
+                {store.getState().isShowFooter ? <Footer /> : ''}
             </div>
         )
     }
@@ -37,14 +46,23 @@ export default class App extends Component {
         this.setState(store.getState())
     }
     componentDidMount() {
-
-        let { pathname } = this.props.history.location
-        if (pathname === "/login" || pathname === "/reg") {
-            const action = {
-                type: "isShowFooter"
+        // 监听路由变化
+        this.props.history.listen((props) => {
+            let { pathname } = props
+            console.log(`当前路由是${pathname}`)
+            if (pathname === "/login" || pathname === "/reg" || pathname === '/detail' || pathname === '/chat/chatinfo' || pathname === '/addfriends') {
+                store.dispatch(FooterStatus())
+            } else {
+                store.dispatch(ShowFooter())
             }
-            store.dispatch(action)
-        }
-
+        })
     }
+
+
+
+
+
+
 }
+
+export default App

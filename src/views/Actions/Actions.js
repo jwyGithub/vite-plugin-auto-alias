@@ -1,24 +1,22 @@
 import React, { Component } from 'react'
 import styles from './Actions.module.scss'
 import Lists from './Lists/Lists.js'
-import axios from 'axios'
+import store from '../../store/store'
+import {getActionList} from '../../requests/requests'
+import {connect} from 'react-redux'
 
-
-export default class Actions extends Component {
-    state = {
-        list: []
-    }
+class Actions extends Component {
     render() {
         return (
-            <div className={ styles.actions }>
-                <ul className={ styles.type }>
+            <div className={styles.actions}>
+                <ul className={styles.type}>
                     <li>动态广场</li>
                     <li>关注</li>
                     <li><i></i>发动态</li>
                 </ul>
                 {
-                    this.state.list.map(item => {
-                        return <Lists lists={ item } key={ item.id } />
+                    this.props.actionList.map(item => {
+                        return <Lists lists={item} key={item.id} />
                     })
                 }
             </div>
@@ -26,12 +24,12 @@ export default class Actions extends Component {
     }
 
     componentDidMount() {
-        axios({
-            url: "http://localhost:3001/react/actions"
-        }).then(res => {
-            this.setState({
-                list: res.data.lists
-            })
-        })
+        store.dispatch(getActionList())
     }
 }
+const stateToProps = (state) => {
+    return {
+        actionList: state.actionList
+    }
+}
+export default connect(stateToProps, null)(Actions)

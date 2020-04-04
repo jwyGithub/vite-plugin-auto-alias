@@ -1,22 +1,15 @@
 import React, { Component } from 'react'
 import styles from './My.module.scss'
-import UserInfo from './UserInfo/UserInfo'
-import axios from 'axios'
-// import store from '../../store/store'
+import UserInfo from '../../components/UserInfo/UserInfo'
+import {getUserInfo} from '../../requests/requests'
+import store from '../../store/store'
 
-export default class My extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            userinfo: {}
-        }
-    }
-    
+class My extends Component {
     render() {
         return (
-            <div className={ styles.my }>
-                <div className={ styles.top }>
-                    <UserInfo userinfo={ this.state.userinfo ? this.state.userinfo : "" } detail={ this.detail } />
+            <div className={styles.my}>
+                <div className={styles.top}>
+                    <UserInfo userinfo={store.getState().userinfo ? store.getState().userinfo : ""} detail={this.detail} />
                 </div>
                 <ul>
                     <li>
@@ -50,14 +43,7 @@ export default class My extends Component {
 
     componentDidMount() {
         // 获取用户信息
-        axios({
-            url: "http://localhost:3001/react/userinfo",
-        }).then((res) => {
-            this.setState({
-                userinfo: res.data.msg
-            })
-
-        })
+        store.dispatch(getUserInfo(store.getState().openid))
     }
 
     detail = () => {
@@ -68,3 +54,5 @@ export default class My extends Component {
         console.log('进入用户信息界面')
     }
 }
+
+export default My

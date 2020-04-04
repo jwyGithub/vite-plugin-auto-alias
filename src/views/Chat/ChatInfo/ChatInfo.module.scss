@@ -1,94 +1,40 @@
 .chatinfo{
-    ul{
-        li {
-            position: relative;
-            margin-top: 20px;
-            min-height: 43px;
-            overflow: hidden;
-            .message-text {
-              position: relative;
-              width: auto;
-              max-width: 65%;
-              min-height: 27px;
-              border-radius: 5px;
-              line-height: 25px;
-              font-size: 16px;
-              text-align: left;
-              padding: 8px;
-              word-break: break-all;
-              > span {
-                display: inline-block;
-                max-width: 180px;
-              }
-            }
-        
-            .message-text:before {
-              position: absolute;
-              content: "";
-              width: 0;
-              height: 0;
-              top: 10px;
-              border-top: 10px solid transparent;
-              border-bottom: 10px solid transparent;
-            }
-            .text-right {
-              float: right;
-              margin-right: 78px;
-              background: #62b900;
-              > span {
-                text-align: right;
-              }
-              .duration {
-                position: absolute;
-                left: -25px;
-              }
-            }
-            .text-right:before {
-              right: -7px;
-              border-left: 10px solid #62b900;
-            }
-        
-            .text-left {
-              float: left;
-              margin-left: 78px;
-              background: #fff;
-              > span {
-                text-align: left;
-              }
-              .duration {
-                position: absolute;
-                right: -25px;
-              }
-            }
-            .text-left:before {
-              left: -7px;
-              border-right: 10px solid #fff;
-            }
-        
-            img{
-              width: 44px;
-              height: 44px;
-              border-radius: 5px;
-            }
-        
-            .icon-right {
-              position: absolute;
-              top: 0;
-              right: 20px;
-            }
-        
-            .icon-left {
-              position: absolute;
-              top: 0;
-              left: 20px;
-            }
-            .loading {
-              position: absolute;
-              top: calc(50% - 8px);
-              width: 16px;
-              height: 16px;
-              left: -25px;
-            }
-          }
+  width: 100%;
+  height: 100%;
+  .back{
+    position: fixed;
+    width: 100%;
+    top: 0;
+  }
+  ul{
+    position: absolute;
+    top: 30px;
+    width: 100%;
+    padding: 0 10px;
+    li{
+      width: 100%;
+      font-size: 16px;
+      margin: 3px 0;
     }
+    .me{
+      text-align: right;
+    }
+  }
+  .ipt{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: grey;
+    input{
+      width: 80%;
+      line-height: 25px;
+      background: #fff;
+    }
+    button{
+      width: 20%;
+      line-height: 25px;
+      background: none;
+      border: 1px solid gray;
+    }
+  }
 }

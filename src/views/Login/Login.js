@@ -1,72 +1,105 @@
 import React, { Component } from 'react';
 import styles from './Login.module.scss'
+import axios from 'axios'
+import { Button, message } from 'antd'
+import store from '../../store/store'
+import { ShowFooter, OpenID } from '../../store/actionCreators'
+
+import socket from '../../utils/io'
 
 class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: '',
+            password: ""
+        }
+
+    }
     render() {
         return (
-            <div className={ styles.login }>
-                <div className={ styles.login_logo }>
+            <div className={styles.login}>
+                <div className={styles.login_logo}>
                     <section>
-                        <img src={ require('./imgs/logo.png') } alt="logo" />
+                        <img src={require('./imgs/logo.png')} alt="logo" />
                     </section>
                 </div>
-                <div className={ styles.login_body }>
+                <div className={styles.login_body}>
                     <section>
                         <ul>
                             <li>
-                                <input type="text" className={ styles.account } placeholder="手机/邮箱" />
+                                <input
+                                    type="text"
+                                    className={styles.account}
+                                    defaultValue={this.state.username}
+                                    onChange={e => this.setState({ username: e.target.value })}
+                                    placeholder="手机/邮箱" />
                             </li>
                             <li>
-                                <input type="password" className={ styles.pwd } placeholder="密码" />
+                                <input
+                                    type="password"
+                                    className={styles.pwd}
+                                    defaultValue={this.state.password}
+                                    onChange={e => this.setState({ password: e.target.value })}
+                                    placeholder="密码" />
                             </li>
                         </ul>
-                        <a className={ styles.forget }>忘记密码？</a>
-                        <div className={ styles.third }>
-                            <a href="#" className={ styles.qq }>
+                        <a href="true" className={styles.forget}>忘记密码？</a>
+                        <div className={styles.third}>
+                            <a href="true" className={styles.qq}>
                                 <i></i>
                                 <span>QQ</span>
                             </a>
-                            <a href="#" className={ styles.wechat }>
+                            <a href="true" className={styles.wechat}>
                                 <i></i>
                                 <span>微信</span>
                             </a>
                         </div>
-                        {/* <Button button-title="登陆" onClick={ this.login }></Button> */ }
+                        <Button type="primary" onClick={this.login}>登陆</Button>
+                        <Button type="primary" onClick={this.reg}>注册</Button>
                     </section>
                 </div>
 
             </div >
         );
     }
-    componentDidMount() {
-        // console.log(this.props)
-    }
 
     login = () => {
+        let { username, password } = this.state
         //  邮箱正则
         let mailReg = /^(\w-*\.*)+@(\w-?)+(\.\w{ 2,})+$/;
         // 手机正则
-        let telReg = /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{ 8 }$/;
-        if (!mailReg.test(this.acc) || !telReg.test(this.acc)) {
-            this.$axios({
-                // url: `${baseUrl}/api/login`,
+        let telReg = /^1(3|4|5|6|7|8|9)\d{9}$/;
+        // let telReg = /^\d{3}$/;
+        if (mailReg.test(username) || telReg.test(username)) {
+            axios({
+                url: `http://localhost:3001/react/login`,
                 method: "post",
                 data: {
-                    account: this.acc,
-                    password: this.pwd
+                    username: username,
+                    password: password
                 }
             }).then(res => {
+                let { msg } = res.data
                 if (res.data.code === 200 && res.data.msg === "登陆成功") {
-                    localStorage.setItem("token", res.data.token);
-                    localStorage.setItem("username", this.acc)
-                    this.$router.push({ name: "my" });
+                    //发送当前登录用户信息以及socketid给服务端
+                    socket.emit("loginInfo", { socketid: socket.id, openid: res.data.openid })
+                    //修改footer状态
+                    store.dispatch(ShowFooter())
+                    store.dispatch(OpenID(res.data.openid))
+                    //跳转至首页
+                    this.props.history.push({ pathname: "/home", query: res.data.openid })
                 } else {
-                    // Toast(res.data.msg);
+                    message.info(msg)
                 }
             });
         } else {
-            // Toast("请输入正确的邮箱或者手机号");
+            message.warning("请输入正确的邮箱或者手机号");
         }
+    }
+    //注册
+    reg = () => {
+        this.props.history.push('/reg')
     }
 }
 

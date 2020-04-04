@@ -21,13 +21,13 @@ export default class Cell extends Component {
         return (
             <div className={styles.cell}>
                 <Badge count={data.unread} onClick={userInfo.bind(null,data)}>
-                    <Avatar shape="square" icon="user" size={45} />
+                    <Avatar shape="square" icon="user" size={45} src={data.iconpath}/>
                 </Badge>
                 <div className={styles.con} onClick={msgInfo.bind(null,data)}>
                     <h3>{data.name}</h3>
-                    <p>{data.msg}</p>
+                    <p>{data.lastmsg}</p>
                 </div>
-                <p className={styles.date}>{data.date}</p>
+                <p className={styles.date}>{data.time}</p>
             </div>
         )
     }
