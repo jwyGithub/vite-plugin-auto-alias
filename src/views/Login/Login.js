@@ -73,7 +73,7 @@ class Login extends Component {
         // let telReg = /^\d{3}$/;
         if (mailReg.test(username) || telReg.test(username)) {
             axios({
-                url: `http://localhost:3001/react/login`,
+                url: `http://zjcloud.tk:3001/react/login`,
                 method: "post",
                 data: {
                     username: username,

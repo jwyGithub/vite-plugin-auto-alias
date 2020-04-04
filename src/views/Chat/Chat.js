@@ -27,7 +27,7 @@ export default class Chat extends Component {
 
     componentDidMount() {
         axios({
-            url: "http://localhost:3001/react/chat"
+            url: "http://zjcloud.tk:3001/react/chat"
         }).then(res => {
             this.setState({ data: res.data.data })
         })

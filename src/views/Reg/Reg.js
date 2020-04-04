@@ -84,7 +84,7 @@ class Login extends Component {
 
     getRegData = (tel, pwd, name) => {
         axios({
-            url: `http://localhost:3001/react/reg`,
+            url: `http://zjcloud.tk:3001/react/reg`,
             method: "post",
             data: {
                 username: tel,

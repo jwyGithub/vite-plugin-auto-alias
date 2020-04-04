@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 
-var socket = io('http://localhost:3001');//链接服务端
+var socket = io('http://zjcloud.tk:3001');//链接服务端
 
 socket.on('connect', function () {
     console.log(`socket已连接`)
