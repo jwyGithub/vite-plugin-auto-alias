@@ -8,8 +8,6 @@ import { persistor } from './store/store'
 import { BrowserRouter, Route } from 'react-router-dom'
 import { Provider } from 'react-redux';
 
-
-122
 //默认css样式
 import 'antd/dist/antd.css'
 import './index.css';
