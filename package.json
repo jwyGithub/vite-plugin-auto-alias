@@ -1,7 +1,7 @@
 {
     "name": "vite-plugin-auto-alias",
     "type": "module",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "automatically generate alias based on path",
     "author": "jiangweiye <jiangweiye@outlook.com> (https://github.com/jwyGithub)",
     "license": "MIT",
@@ -24,7 +24,7 @@
     ],
     "scripts": {
         "build": "rollup -c",
-        "release": "bumpp package.json --commit --push --tag && npm publish --access=public",
+        "release": "npm run build && bumpp package.json --commit --push --tag && npm publish --access=public",
         "lint": "eslint ."
     },
     "peerDependencies": {
