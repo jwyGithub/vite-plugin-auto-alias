@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "useDefineForClassFields": true,
+        "lib": ["ESNext", "DOM"],
+        "moduleResolution": "Node",
+        "strict": true,
+        "module": "esnext"
+    },
+    "include": ["index.ts"],
+    "exclude": ["node_modules", "**/*.spec.ts"]
+}
+
