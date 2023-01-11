@@ -31,7 +31,7 @@
         "vite": "*"
     },
     "devDependencies": {
-        "@jiangweiye/eslint-config": "^0.0.19",
+        "@jiangweiye/eslint-config": "^0.0.21",
         "@types/node": "^18.11.18",
         "bumpp": "^8.2.1",
         "eslint": "^8.31.0",
