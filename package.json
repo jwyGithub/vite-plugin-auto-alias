@@ -1,12 +1,20 @@
 {
     "name": "vite-plugin-auto-alias",
+    "type": "module",
     "version": "0.0.4",
     "description": "automatically generate alias based on path",
-    "type": "module",
+    "author": "jiangweiye <jiangweiye@outlook.com> (https://github.com/jwyGithub)",
+    "license": "MIT",
+    "homepage": "https://github.com/jwyGithub/vite-plugin-auto-alias",
+    "keywords": [
+        "vite",
+        "vite-plugin",
+        "alias"
+    ],
     "exports": {
         ".": {
-            "import": "./dist/index.esm.js",
-            "require": "./dist/index.cjs.js"
+            "require": "./dist/index.cjs.js",
+            "import": "./dist/index.esm.js"
         }
     },
     "main": "./dist/index.cjs.js",
@@ -16,24 +24,20 @@
     ],
     "scripts": {
         "build": "rollup -c",
-        "release": "npm publish --access=public"
+        "release": "bumpp package.json --commit --push --tag && npm publish --access=public",
+        "lint": "eslint ."
     },
-    "keywords": [
-        "vite",
-        "vite-plugin",
-        "alias"
-    ],
-    "author": "jiangweiye",
-    "license": "ISC",
+    "peerDependencies": {
+        "vite": "*"
+    },
     "devDependencies": {
+        "@jiangweiye/eslint-config": "^0.0.19",
         "@types/node": "^18.11.18",
+        "bumpp": "^8.2.1",
+        "eslint": "^8.31.0",
         "rollup": "^3.9.1",
         "rollup-plugin-typescript2": "^0.34.1",
         "typescript": "^4.9.4",
         "vite": "^4.0.4"
-    },
-    "peerDependencies": {
-        "vite": "*"
     }
 }
-

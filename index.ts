@@ -1,6 +1,7 @@
-import { PluginOption, Alias, normalizePath, AliasOptions, UserConfig } from 'vite';
 import { join } from 'path';
 import { lstatSync, readdirSync } from 'fs';
+import type { Alias, AliasOptions, PluginOption, UserConfig } from 'vite';
+import { normalizePath } from 'vite';
 
 function isDir(path: string): boolean {
     return lstatSync(path).isDirectory();
