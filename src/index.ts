@@ -1,8 +1,8 @@
 import { join, parse } from 'path';
-import type { Alias, PluginOption, ResolvedConfig } from 'vite';
+import type { Alias, PluginOption } from 'vite';
 import { normalizePath } from 'vite';
 import type { GetDirs } from './shared';
-import { getDirs, unique } from './shared';
+import { getDirs } from './shared';
 import HackTsconfig from './HackTsconfig';
 
 function genArrayAlias(dirs: GetDirs = [], root: string = join(process.cwd(), 'src')) {
@@ -28,16 +28,11 @@ interface AutoAlias {
 }
 
 export default ({ root, tsconfig }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
-    // eslint-disable-next-line init-declarations
-    let _config: ResolvedConfig;
     const dirs = getDirs(root);
     const hackTsconfig = new HackTsconfig(root, tsconfig);
     return {
         name: 'vite-plugin-auto-alias',
         enforce: 'pre',
-        configResolved(config) {
-            _config = config;
-        },
         config() {
             const alias = genArrayAlias(dirs, root);
             hackTsconfig.addPaths(alias);
@@ -48,24 +43,24 @@ export default ({ root, tsconfig }: AutoAlias = DEFAULT_CONFIG): PluginOption =>
             };
         },
         configureServer(server) {
-            server.watcher.on('addDir', path => {
+            server.watcher.on('all', (eventName, path) => {
                 const { dir, name } = parse(path);
                 if (dir === root) {
-                    const newAlias = {
-                        find: new RegExp(`^@${name}`),
-                        replacement: normalizePath(path)
-                    };
-                    _config.resolve.alias.push(newAlias);
-                    hackTsconfig.addPath(newAlias);
-                }
-                _config.resolve.alias = unique(_config.resolve.alias);
-            });
-
-            server.watcher.on('unlinkDir', (path: string) => {
-                const { dir } = parse(path);
-                if (dir === root) {
-                    _config.resolve.alias = _config.resolve.alias.filter(item => item.replacement !== path);
-                    hackTsconfig.removePath(path);
+                    switch (eventName) {
+                        case 'addDir':
+                            const newAlias = {
+                                find: new RegExp(`^@${name}`),
+                                replacement: normalizePath(path)
+                            };
+                            hackTsconfig.addPath(newAlias);
+                            break;
+                        case 'unlinkDir':
+                            hackTsconfig.removePath(path);
+                            break;
+                        default:
+                            break;
+                    }
+                    server.restart;
                 }
             });
         }
