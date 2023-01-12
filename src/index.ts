@@ -15,13 +15,13 @@ function genArrayAlias(dirs: GetDirs = [], root: string = join(process.cwd(), 's
     );
 }
 
-export const DEFAULT_CONFIG = {
+const DEFAULT_CONFIG = {
     root: join(process.cwd(), 'src'),
     tsconfig: join(process.cwd(), 'tsconfig.json'),
     debug: false
 };
 
-export interface AutoAlias {
+interface AutoAlias {
     root: string;
     tsconfig: string;
     debug: boolean;
