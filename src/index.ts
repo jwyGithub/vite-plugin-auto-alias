@@ -60,7 +60,7 @@ export default ({ root, tsconfig }: AutoAlias = DEFAULT_CONFIG): PluginOption =>
                         default:
                             break;
                     }
-                    server.restart;
+                    server.restart();
                 }
             });
         }
