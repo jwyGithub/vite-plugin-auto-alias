@@ -44,6 +44,13 @@ export default defineConfig(({ command, mode }) => {
 });
 ```
 
+```typescript
+interface AutoAlias {
+    root: string;
+    tsconfig: string;
+}
+```
+
 ## example
 
     |-- src
