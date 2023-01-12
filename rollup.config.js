@@ -2,7 +2,7 @@ import { defineConfig } from 'rollup';
 import ts from 'rollup-plugin-typescript2';
 
 export default defineConfig({
-    input: './index.ts',
+    input: './src/index.ts',
     output: [
         {
             format: 'cjs',
@@ -25,7 +25,7 @@ export default defineConfig({
                     declarationDir: 'dist',
                     allowJs: true
                 },
-                include: ['index.ts']
+                include: ['src/**/*']
             },
             clean: true,
             useTsconfigDeclarationDir: true
