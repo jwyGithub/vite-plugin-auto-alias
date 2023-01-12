@@ -55,8 +55,8 @@ export default ({ root, tsconfig }: AutoAlias = DEFAULT_CONFIG): PluginOption =>
                         find: new RegExp(`^@${name}`),
                         replacement: normalizePath(path)
                     };
-                    hackTsconfig.addPath(newAlias);
                     _config.resolve.alias.push(newAlias);
+                    hackTsconfig.addPath(newAlias);
                 }
                 _config.resolve.alias = unique(_config.resolve.alias);
             });
@@ -64,8 +64,8 @@ export default ({ root, tsconfig }: AutoAlias = DEFAULT_CONFIG): PluginOption =>
             server.watcher.on('unlinkDir', (path: string) => {
                 const { dir } = parse(path);
                 if (dir === root) {
-                    hackTsconfig.removePath(path);
                     _config.resolve.alias = _config.resolve.alias.filter(item => item.replacement !== path);
+                    hackTsconfig.removePath(path);
                 }
             });
         }
