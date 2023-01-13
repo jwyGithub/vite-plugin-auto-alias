@@ -32,7 +32,9 @@ npm install vite-plugin-auto-alias -D
 
 ## use
 
-#### vite.config.ts
+#### with typescript project
+
+> vite.config.ts
 
 ```typescript
 import autoAlias from 'vite-plugin-auto-alias';
@@ -44,12 +46,57 @@ export default defineConfig(({ command, mode }) => {
 });
 ```
 
+`define root path and config path`
+
 ```typescript
-interface AutoAlias {
-    root: string;
-    tsconfig: string;
-}
+import autoAlias from 'vite-plugin-auto-alias';
+import { resolve } from 'path';
+
+export default defineConfig(({ command, mode }) => {
+    return {
+        plugins: [
+            autoAlias({
+                root: resolve(__dirname, './src'),
+                tsconfig: resolve(__dirname, './tsconfig.json')
+            })
+        ]
+    };
+});
 ```
+
+#### with javascript project
+
+> vite.config.js
+
+```typescript
+import autoAlias from 'vite-plugin-auto-alias';
+
+export default defineConfig(({ command, mode }) => {
+    return {
+        plugins: [autoAlias()]
+    };
+});
+```
+
+`define root path and config path`
+
+```typescript
+import autoAlias from 'vite-plugin-auto-alias';
+import { resolve } from 'path';
+
+export default defineConfig(({ command, mode }) => {
+    return {
+        plugins: [
+            autoAlias({
+                root: resolve(__dirname, './src'),
+                tsconfig: resolve(__dirname, './jsconfig.json')
+            })
+        ]
+    };
+});
+```
+
+**`tips : In order to get a better path prompt, be sure to configure the jsconfig.json file or tsconfig.json file in the project`**
 
 ## example
 
@@ -70,20 +117,5 @@ import xxx from '@store/xxx';
 import xxx from '@utils/xxx';
 import xxx from '@views/xxx';
 ....
-```
-
-#### tsconfig.json or jsconfig.json
-
-```json
-{
-    "compilerOptions": {
-        "paths": {
-            "@/*": ["src/*"],
-            "@plugins/*": ["src/plugins/*"],
-            "@router/*": ["src/router/*"],
-            "@scss/*": ["src/scss/*"]
-        }
-    }
-}
 ```
 

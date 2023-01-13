@@ -21,46 +21,49 @@ const DEFAULT_CONFIG = {
 };
 
 export default ({ root, tsconfig }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
-    // eslint-disable-next-line init-declarations
-    let hackTsconfig: HackTsconfig;
-    const dirs = getDirs(root);
-    if (hasFile(tsconfig)) {
-        hackTsconfig = new HackTsconfig(root, tsconfig);
-    }
-    return {
-        name: 'vite-plugin-auto-alias',
-        enforce: 'pre',
-        config() {
-            const alias = genArrayAlias(dirs, root);
-            hasFile(tsconfig) && hackTsconfig.addPaths(alias);
-            return {
-                resolve: {
-                    alias
-                }
-            };
-        },
-        configureServer(server) {
-            server.watcher.on('all', (eventName, path) => {
-                const { dir, name } = parse(path);
-                if (dir === root) {
-                    switch (eventName) {
-                        case 'addDir':
-                            const newAlias = {
-                                find: new RegExp(`^@${name}`),
-                                replacement: normalizePath(path)
-                            };
-                            hasFile(tsconfig) && hackTsconfig.addPath(newAlias);
-                            break;
-                        case 'unlinkDir':
-                            hasFile(tsconfig) && hackTsconfig.removePath(path);
-                            break;
-                        default:
-                            break;
-                    }
-                    server.restart();
-                }
-            });
+    if (!hasFile(root)) {
+        return undefined;
+    } else {
+        let hackTsconfig: HackTsconfig | null = null;
+        const dirs = getDirs(root);
+        if (hasFile(tsconfig)) {
+            hackTsconfig = new HackTsconfig(root, tsconfig);
         }
-    };
+        return {
+            name: 'vite-plugin-auto-alias',
+            enforce: 'pre',
+            config() {
+                const alias = genArrayAlias(dirs, root);
+                hackTsconfig?.addPaths(alias);
+                return {
+                    resolve: {
+                        alias
+                    }
+                };
+            },
+            configureServer(server) {
+                server.watcher.on('all', (eventName, path) => {
+                    const { dir, name } = parse(path);
+                    if (dir === root) {
+                        switch (eventName) {
+                            case 'addDir':
+                                const newAlias = {
+                                    find: new RegExp(`^@${name}`),
+                                    replacement: normalizePath(path)
+                                };
+                                hackTsconfig?.addPath(newAlias);
+                                break;
+                            case 'unlinkDir':
+                                hackTsconfig?.removePath(path);
+                                break;
+                            default:
+                                break;
+                        }
+                        server.restart();
+                    }
+                });
+            }
+        };
+    }
 };
 
