@@ -1,9 +1,9 @@
 import { join, parse } from 'path';
 import type { Alias, PluginOption } from 'vite';
 import { normalizePath } from 'vite';
-import type { GetDirs } from './shared';
-import { getDirs } from './shared';
+import { getDirs, hasFile } from './shared';
 import HackTsconfig from './HackTsconfig';
+import type { AutoAlias, GetDirs } from './global';
 
 function genArrayAlias(dirs: GetDirs = [], root: string = join(process.cwd(), 'src')) {
     return dirs.reduce<Alias[]>(
@@ -17,25 +17,22 @@ function genArrayAlias(dirs: GetDirs = [], root: string = join(process.cwd(), 's
 
 const DEFAULT_CONFIG = {
     root: join(process.cwd(), 'src'),
-    tsconfig: join(process.cwd(), 'tsconfig.json'),
-    debug: false
+    tsconfig: join(process.cwd(), 'tsconfig.json')
 };
 
-interface AutoAlias {
-    root: string;
-    tsconfig: string;
-    debug: boolean;
-}
-
 export default ({ root, tsconfig }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
+    // eslint-disable-next-line init-declarations
+    let hackTsconfig: HackTsconfig;
     const dirs = getDirs(root);
-    const hackTsconfig = new HackTsconfig(root, tsconfig);
+    if (hasFile(tsconfig)) {
+        hackTsconfig = new HackTsconfig(root, tsconfig);
+    }
     return {
         name: 'vite-plugin-auto-alias',
         enforce: 'pre',
         config() {
             const alias = genArrayAlias(dirs, root);
-            hackTsconfig.addPaths(alias);
+            hasFile(tsconfig) && hackTsconfig.addPaths(alias);
             return {
                 resolve: {
                     alias
@@ -52,10 +49,10 @@ export default ({ root, tsconfig }: AutoAlias = DEFAULT_CONFIG): PluginOption =>
                                 find: new RegExp(`^@${name}`),
                                 replacement: normalizePath(path)
                             };
-                            hackTsconfig.addPath(newAlias);
+                            hasFile(tsconfig) && hackTsconfig.addPath(newAlias);
                             break;
                         case 'unlinkDir':
-                            hackTsconfig.removePath(path);
+                            hasFile(tsconfig) && hackTsconfig.removePath(path);
                             break;
                         default:
                             break;

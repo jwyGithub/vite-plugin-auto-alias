@@ -1,6 +1,7 @@
-import { lstatSync, readdirSync } from 'fs';
+import { existsSync, lstatSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { normalizePath } from 'vite';
+import type { GetDirs } from './global';
 
 /**
  * @description 是否是文件夹
@@ -11,10 +12,15 @@ export const isDir = (path: string): boolean => {
     return lstatSync(path).isDirectory();
 };
 
-export type GetDirs = Array<{
-    dirName: string;
-    dirPath: string;
-}>;
+/**
+ * @description 是否存在文件
+ * @param path
+ * @returns
+ */
+export const hasFile = (path: string) => {
+    return existsSync(path);
+};
+
 /**
  * @description 获取所有文件夹
  * @param path
