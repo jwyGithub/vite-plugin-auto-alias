@@ -32,7 +32,7 @@ yarn add vite-plugin-auto-alias -D
 npm install vite-plugin-auto-alias -D
 ```
 
-## use
+## 使用
 
 #### 在 typescript 项目中使用
 
