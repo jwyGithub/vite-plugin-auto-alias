@@ -2,39 +2,40 @@ import { join, parse } from 'path';
 import type { Alias, PluginOption } from 'vite';
 import { normalizePath } from 'vite';
 import { getDirs, hasFile } from './shared';
-import HackTsconfig from './HackTsconfig';
+import HackJson from './HackJson';
 import type { AutoAlias, GetDirs } from './global';
-
-function genArrayAlias(dirs: GetDirs = [], root: string = join(process.cwd(), 'src')) {
-    return dirs.reduce<Alias[]>(
-        (result, item) => {
-            result.push({ find: new RegExp(`^@${item.dirName}`), replacement: item.dirPath });
-            return result;
-        },
-        [{ find: '@', replacement: root }]
-    );
-}
 
 const DEFAULT_CONFIG = {
     root: join(process.cwd(), 'src'),
-    tsconfig: join(process.cwd(), 'tsconfig.json')
+    prefix: '@',
+    jsonPath: join(process.cwd(), 'tsconfig.json')
 };
 
-export default ({ root, tsconfig }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
+function genArrayAlias(dirs: GetDirs, root: string, prefix: string) {
+    return dirs.reduce<Alias[]>(
+        (result, item) => {
+            result.push({ find: new RegExp(`^${prefix}${item.dirName}`), replacement: item.dirPath });
+            return result;
+        },
+        [{ find: prefix, replacement: root }]
+    );
+}
+
+export default ({ root, prefix, jsonPath }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
     if (!hasFile(root)) {
         return undefined;
     } else {
-        let hackTsconfig: HackTsconfig | null = null;
+        let hackJson: HackJson | null = null;
         const dirs = getDirs(root);
-        if (hasFile(tsconfig)) {
-            hackTsconfig = new HackTsconfig(root, tsconfig);
+        if (hasFile(jsonPath)) {
+            hackJson = new HackJson(root, jsonPath);
         }
         return {
             name: 'vite-plugin-auto-alias',
             enforce: 'pre',
             config() {
-                const alias = genArrayAlias(dirs, root);
-                hackTsconfig?.addPaths(alias);
+                const alias = genArrayAlias(dirs, root, prefix);
+                hackJson?.addPaths(alias);
                 return {
                     resolve: {
                         alias
@@ -51,10 +52,10 @@ export default ({ root, tsconfig }: AutoAlias = DEFAULT_CONFIG): PluginOption =>
                                     find: new RegExp(`^@${name}`),
                                     replacement: normalizePath(path)
                                 };
-                                hackTsconfig?.addPath(newAlias);
+                                hackJson?.addPath(newAlias);
                                 break;
                             case 'unlinkDir':
-                                hackTsconfig?.removePath(path);
+                                hackJson?.removePath(path);
                                 break;
                             default:
                                 break;

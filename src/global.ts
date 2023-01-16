@@ -6,6 +6,7 @@ export type GetDirs = Array<{
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type AutoAlias = {
     root: string;
-    tsconfig: string;
+    prefix: string;
+    jsonPath: string;
 };
 

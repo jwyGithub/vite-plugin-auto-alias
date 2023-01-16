@@ -57,7 +57,8 @@ export default defineConfig(({ command, mode }) => {
         plugins: [
             autoAlias({
                 root: resolve(__dirname, './src'),
-                tsconfig: resolve(__dirname, './tsconfig.json')
+                prefix: '@',
+                jsonPath: resolve(__dirname, './tsconfig.json')
             })
         ]
     };
@@ -65,6 +66,8 @@ export default defineConfig(({ command, mode }) => {
 ```
 
 #### with javascript project
+
+### if you are using a javascript project, you must specify the path of jsconfig.json, which is the jsonPath option
 
 > vite.config.js
 
@@ -89,14 +92,26 @@ export default defineConfig(({ command, mode }) => {
         plugins: [
             autoAlias({
                 root: resolve(__dirname, './src'),
-                tsconfig: resolve(__dirname, './jsconfig.json')
+                prefix: '@',
+                // require
+                jsonPath: resolve(__dirname, './jsconfig.json')
             })
         ]
     };
 });
 ```
 
-**`tips : In order to get a better path prompt, be sure to configure the jsconfig.json file or tsconfig.json file in the project`**
+## Type
+
+```typescript
+export type AutoAlias = {
+    root: string;
+    prefix: string;
+    jsonPath: string;
+};
+```
+
+**tips : In order to get a better path prompt, be sure to configure the jsconfig.json file or tsconfig.json file in the project**
 
 ## example
 

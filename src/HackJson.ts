@@ -2,12 +2,12 @@ import { readFileSync, writeFileSync } from 'fs';
 import { parse } from 'path';
 import type { Alias } from 'vite';
 
-export default class HackTsconfig {
+export default class HackJson {
     private __ROOT__: string;
-    private __TSCONFIG__: string;
-    constructor(root: string, tsconfig: string) {
+    private __JSONCONFIG__: string;
+    constructor(root: string, jsonConfig: string) {
         this.__ROOT__ = root;
-        this.__TSCONFIG__ = tsconfig;
+        this.__JSONCONFIG__ = jsonConfig;
     }
 
     public addPaths(alias: Alias[]) {
@@ -45,7 +45,7 @@ export default class HackTsconfig {
 
     private getBaseConfig(): { [key: string]: any } {
         try {
-            const configStr = readFileSync(this.__TSCONFIG__, 'utf-8');
+            const configStr = readFileSync(this.__JSONCONFIG__, 'utf-8');
             return JSON.parse(configStr);
         } catch (error: any) {
             throw new Error(error);
@@ -66,7 +66,7 @@ export default class HackTsconfig {
     }
 
     private updateConfig(config: any) {
-        writeFileSync(this.__TSCONFIG__, JSON.stringify(config, null, 4));
+        writeFileSync(this.__JSONCONFIG__, JSON.stringify(config, null, 4));
     }
 }
 
