@@ -1,8 +1,8 @@
-English | [简体中文](./README.zh.md)
+简体中文 | [English](./README.md)
 
 # vite-plugin-auto-alias
 
-automatically generate alias based on path
+基于路径自动生成别名
 
 <p align="center">
   <img src="https://img.shields.io/npm/v/vite-plugin-auto-alias" alt='version'>
@@ -12,21 +12,21 @@ automatically generate alias based on path
 </p>
 <br />
 
-## install
+## 安装
 
-#### with pnpm
+#### 使用 pnpm
 
 ```sh
 pnpm add vite-plugin-auto-alias -D
 ```
 
-#### with yarn
+#### 使用 yarn
 
 ```sh
 yarn add vite-plugin-auto-alias -D
 ```
 
-#### with npm
+#### 使用 npm
 
 ```sh
 npm install vite-plugin-auto-alias -D
@@ -34,7 +34,7 @@ npm install vite-plugin-auto-alias -D
 
 ## use
 
-#### with typescript project
+#### 在 typescript 项目中使用
 
 > vite.config.ts
 
@@ -48,7 +48,7 @@ export default defineConfig(({ command, mode }) => {
 });
 ```
 
-`define root path and config path`
+`自定义路径，别名以及json路径`
 
 ```typescript
 import autoAlias from 'vite-plugin-auto-alias';
@@ -67,9 +67,9 @@ export default defineConfig(({ command, mode }) => {
 });
 ```
 
-#### with javascript project
+#### 在 javascript 项目中使用
 
-### if you are using a javascript project, you must specify the path of jsconfig.json, that is, the jsonPath option
+### 如果使用的是 javascript 项目，则必须指定 jsconfig.json 的路径，即 jsonPath 选项
 
 > vite.config.js
 
@@ -83,7 +83,7 @@ export default defineConfig(({ command, mode }) => {
 });
 ```
 
-`define root path and config path`
+`自定义路径，别名以及json路径`
 
 ```typescript
 import autoAlias from 'vite-plugin-auto-alias';
@@ -95,7 +95,7 @@ export default defineConfig(({ command, mode }) => {
             autoAlias({
                 root: resolve(__dirname, './src'),
                 prefix: '@',
-                // require
+                // 必须
                 jsonPath: resolve(__dirname, './jsconfig.json')
             })
         ]
@@ -103,7 +103,7 @@ export default defineConfig(({ command, mode }) => {
 });
 ```
 
-## Type
+## 类型
 
 ```typescript
 export type AutoAlias = {
@@ -113,9 +113,9 @@ export type AutoAlias = {
 };
 ```
 
-**tips : In order to get a better path prompt, be sure to configure the jsconfig.json file or tsconfig.json file in the project**
+**提示：为了获得更好的路径提示，请确保在项目中配置 jsconfig.json 文件或 tsconfig.json**
 
-## example
+## 示例
 
     |-- src
         |-- plugins
