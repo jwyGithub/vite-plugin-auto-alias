@@ -1,4 +1,4 @@
-简体中文 | [English](./README.md)
+[English](https://github.com/jwyGithub/vite-plugin-auto-alias/blob/master/README.md) | 简体中文
 
 # vite-plugin-auto-alias
 
