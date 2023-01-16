@@ -69,7 +69,7 @@ export default defineConfig(({ command, mode }) => {
 
 #### with javascript project
 
-### if you are using a javascript project, you must specify the path of jsconfig.json, that is, the jsonPath option
+> if you are using a javascript project, you must specify the path of jsconfig.json, that is, the jsonPath option
 
 > vite.config.js
 
