@@ -25,7 +25,8 @@ export default defineConfig({
                     declarationDir: 'dist',
                     allowJs: true
                 },
-                include: ['src/**/*']
+                include: ['src/**/*'],
+                exclude: ['rollup.config.ts']
             },
             clean: true,
             useTsconfigDeclarationDir: true

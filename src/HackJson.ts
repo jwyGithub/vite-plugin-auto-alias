@@ -1,6 +1,7 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 import { parse } from 'path';
 import type { Alias } from 'vite';
+import type { IAliasPath } from './global';
 
 export default class HackJson {
     private __ROOT__: string;
@@ -10,63 +11,37 @@ export default class HackJson {
         this.__JSONCONFIG__ = jsonConfig;
     }
 
-    public addPaths(alias: Alias[]) {
-        const config = this.getBaseConfig();
-        const lastConfigPaths = config.compilerOptions.paths;
-        const nextConfigPaths: { [key: string]: string[] } = {};
-        for (const { find } of alias) {
-            const { key, value } = this.getPathKeyAndValue(find);
-            nextConfigPaths[key] = [value];
-        }
-        config.compilerOptions.paths = { ...nextConfigPaths, ...lastConfigPaths };
-        this.updateConfig(config);
-    }
-
-    public addPath(alias: Alias) {
-        const { find } = alias;
-        const config = this.getBaseConfig();
-        const lastConfigPaths = config.compilerOptions.paths;
-        const nextConfigPaths: { [key: string]: string[] } = {};
-        const { key, value } = this.getPathKeyAndValue(find);
-        nextConfigPaths[key] = [value];
-        config.compilerOptions.paths = { ...nextConfigPaths, ...lastConfigPaths };
-        this.updateConfig(config);
-    }
-
-    public removePath(path: string) {
-        const { name } = parse(path);
-        const find = new RegExp(`^@${name}`);
-        const { key } = this.getPathKeyAndValue(find);
-        const config = this.getBaseConfig();
-        const lastConfigPaths = config.compilerOptions.paths;
-        delete lastConfigPaths[key];
-        this.updateConfig(config);
-    }
-
-    private getBaseConfig(): { [key: string]: any } {
-        try {
-            const configStr = readFileSync(this.__JSONCONFIG__, 'utf-8');
-            return JSON.parse(configStr);
-        } catch (error: any) {
-            throw new Error(error);
-        }
-    }
-
-    private getPathKeyAndValue(find: string | RegExp): {
+    private getPathKeyAndValue({ find, prefix }: { find: string | RegExp; prefix: string }): {
         key: string;
         value: string;
     } {
         const { name } = parse(this.__ROOT__);
         const pathKey = typeof find === 'string' ? `${find}/*` : `${find.source.replace('^', '')}/*`;
-        const pathValue = typeof find === 'string' ? `${name}/${find}/*`.replace(/@\//, '') : `${name}/${find.source.replace('^@', '')}/*`;
+        const pathValue =
+            typeof find === 'string'
+                ? `${name}/${find}/*`.replace(new RegExp(`${prefix}/`), '')
+                : `${name}/${find.source.replace(`^${prefix}`, '')}/*`;
         return {
             key: pathKey,
             value: pathValue
         };
     }
 
-    private updateConfig(config: any) {
-        writeFileSync(this.__JSONCONFIG__, JSON.stringify(config, null, 4));
+    private getConfig(alias: Alias[], prefix: string): IAliasPath {
+        return {
+            compilerOptions: {
+                paths: alias.reduce<{ [key: string]: string[] }>((result, item) => {
+                    const { key, value } = this.getPathKeyAndValue({ find: item.find, prefix });
+                    result[key] = [value];
+                    return result;
+                }, {})
+            }
+        };
+    }
+
+    updateConfig(alias: Alias[], prefix: string) {
+        const config = this.getConfig(alias, prefix);
+        writeFileSync(this.__JSONCONFIG__, JSON.stringify(config, null, 2));
     }
 }
 

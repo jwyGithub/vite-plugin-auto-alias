@@ -27,15 +27,11 @@ export const hasFile = (path: string) => {
  * @returns
  */
 export const getDirs = (path: string): GetDirs => {
-    try {
-        const dirs = readdirSync(path);
-        return dirs.reduce<GetDirs>((result, name) => {
-            const fullPath = join(path, name);
-            isDir(fullPath) && result.push({ dirName: name, dirPath: normalizePath(fullPath) });
-            return result;
-        }, []);
-    } catch (error: any) {
-        throw new Error(error);
-    }
+    const dirs = readdirSync(path);
+    return dirs.reduce<GetDirs>((result, name) => {
+        const fullPath = join(path, name);
+        isDir(fullPath) && result.push({ dirName: name, dirPath: normalizePath(fullPath) });
+        return result;
+    }, []);
 };
 

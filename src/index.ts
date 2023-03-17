@@ -1,17 +1,30 @@
-import { join, parse } from 'path';
+import { join, parse, resolve } from 'path';
 import type { Alias, PluginOption } from 'vite';
-import { normalizePath } from 'vite';
 import { getDirs, hasFile } from './shared';
 import HackJson from './HackJson';
 import type { AutoAlias, GetDirs } from './global';
 
+/**
+ * @description 默认配置
+ */
 const DEFAULT_CONFIG = {
     root: join(process.cwd(), 'src'),
-    prefix: '@',
-    jsonPath: join(process.cwd(), 'tsconfig.json')
+    prefix: '@'
 };
 
-function genArrayAlias(dirs: GetDirs, root: string, prefix: string) {
+/**
+ * @description 别名配置文件路径
+ */
+const ALIAS_JSON_PATH = resolve(__dirname, '../alias.json');
+
+/**
+ * @description 生成数组
+ * @param dir GetDirs
+ * @param root string
+ * @param prefix string
+ * @returns {Alias[]}
+ */
+function genArrayAlias(dirs: GetDirs, root: string, prefix: string): Alias[] {
     return dirs.reduce<Alias[]>(
         (result, item) => {
             result.push({ find: new RegExp(`^${prefix}${item.dirName}`), replacement: item.dirPath });
@@ -21,21 +34,23 @@ function genArrayAlias(dirs: GetDirs, root: string, prefix: string) {
     );
 }
 
-export default ({ root, prefix, jsonPath }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
+/**
+ * @description 入口函数
+ */
+export default ({ root, prefix }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
+    root = root ?? DEFAULT_CONFIG.root;
+    prefix = prefix || DEFAULT_CONFIG.prefix;
     if (!hasFile(root)) {
         return undefined;
     } else {
-        let hackJson: HackJson | null = null;
         const dirs = getDirs(root);
-        if (hasFile(jsonPath)) {
-            hackJson = new HackJson(root, jsonPath);
-        }
+        const writeConfig = new HackJson(root, ALIAS_JSON_PATH);
         return {
             name: 'vite-plugin-auto-alias',
             enforce: 'pre',
             config() {
                 const alias = genArrayAlias(dirs, root, prefix);
-                hackJson?.addPaths(alias);
+                writeConfig.updateConfig(alias, prefix);
                 return {
                     resolve: {
                         alias
@@ -44,18 +59,13 @@ export default ({ root, prefix, jsonPath }: AutoAlias = DEFAULT_CONFIG): PluginO
             },
             configureServer(server) {
                 server.watcher.on('all', (eventName, path) => {
-                    const { dir, name } = parse(path);
+                    const { dir } = parse(path);
                     if (dir === root) {
                         switch (eventName) {
                             case 'addDir':
-                                const newAlias = {
-                                    find: new RegExp(`^@${name}`),
-                                    replacement: normalizePath(path)
-                                };
-                                hackJson?.addPath(newAlias);
-                                break;
                             case 'unlinkDir':
-                                hackJson?.removePath(path);
+                                const alias = genArrayAlias(dirs, root, prefix);
+                                writeConfig.updateConfig(alias, prefix);
                                 break;
                             default:
                                 break;

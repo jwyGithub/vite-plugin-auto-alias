@@ -20,10 +20,11 @@
     "main": "./dist/index.cjs.js",
     "types": "./dist/index.d.ts",
     "files": [
-        "dist"
+        "dist",
+        "alias.json"
     ],
     "scripts": {
-        "build": "rollup -c",
+        "build": "rollup -c rollup.config.ts --configPlugin rollup-plugin-typescript2",
         "release": "npm run build && bumpp package.json --commit --push --tag && npm publish --access=public",
         "lint": "eslint ."
     },
@@ -31,13 +32,14 @@
         "vite": "*"
     },
     "devDependencies": {
-        "@jiangweiye/eslint-config": "^0.0.21",
-        "@types/node": "^18.11.18",
-        "bumpp": "^8.2.1",
-        "eslint": "^8.31.0",
-        "rollup": "^3.9.1",
+        "@jiangweiye/eslint-config": "^0.0.27",
+        "@types/node": "^18.15.3",
+        "bumpp": "^9.0.0",
+        "eslint": "^8.36.0",
+        "rollup": "^3.19.1",
         "rollup-plugin-typescript2": "^0.34.1",
-        "typescript": "^4.9.4",
-        "vite": "^4.0.4"
+        "typescript": "^5.0.2",
+        "vite": "^4.2.0"
     }
 }
+

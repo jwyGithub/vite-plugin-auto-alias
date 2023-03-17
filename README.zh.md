@@ -69,8 +69,6 @@ export default defineConfig(({ command, mode }) => {
 
 #### 在 javascript 项目中使用
 
-### 如果使用的是 javascript 项目，则必须指定 jsconfig.json 的路径，即 jsonPath 选项
-
 > vite.config.js
 
 ```typescript
@@ -101,6 +99,15 @@ export default defineConfig(({ command, mode }) => {
         ]
     };
 });
+```
+
+## 设置 tsconfig.json 或者 jsconfig.json
+
+```json
+{
+    "extends": "vite-plugin-auto-alias/alias"
+    // other config
+}
 ```
 
 ## 类型

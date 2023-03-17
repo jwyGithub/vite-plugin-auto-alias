@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "~/*": [
+        "src/*"
+      ],
+      "~assets/*": [
+        "src/assets/*"
+      ],
+      "~ccc/*": [
+        "src/ccc/*"
+      ],
+      "~components/*": [
+        "src/components/*"
+      ],
+      "~style/*": [
+        "src/style/*"
+      ],
+      "~utils/*": [
+        "src/utils/*"
+      ],
+      "~views/*": [
+        "src/views/*"
+      ]
+    }
+  }
+}
