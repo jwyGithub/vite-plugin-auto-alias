@@ -105,7 +105,8 @@ export default defineConfig(({ command, mode }) => {
 
 ```json
 {
-    "extends": "vite-plugin-auto-alias/alias"
+    "extends": "./node_modules/vite-plugin-auto-alias/alias.json",
+    "baseUrl": "./"
     // other config
 }
 ```

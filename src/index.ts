@@ -1,4 +1,5 @@
-import { join, parse, resolve } from 'path';
+import { dirname, join, parse, resolve } from 'path';
+import { fileURLToPath } from 'url';
 import type { Alias, PluginOption } from 'vite';
 import { getDirs, hasFile } from './shared';
 import HackJson from './HackJson';
@@ -15,6 +16,8 @@ const DEFAULT_CONFIG = {
 /**
  * @description 别名配置文件路径
  */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const ALIAS_JSON_PATH = resolve(__dirname, '../alias.json');
 
 /**
