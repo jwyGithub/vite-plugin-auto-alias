@@ -116,7 +116,6 @@ export default defineConfig(({ command, mode }) => {
 export type AutoAlias = {
     root: string;
     prefix: string;
-    jsonPath: string;
 };
 ```
 
