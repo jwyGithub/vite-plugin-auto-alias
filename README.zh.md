@@ -59,8 +59,7 @@ export default defineConfig(({ command, mode }) => {
         plugins: [
             autoAlias({
                 root: resolve(__dirname, './src'),
-                prefix: '@',
-                jsonPath: resolve(__dirname, './tsconfig.json')
+                prefix: '@'
             })
         ]
     };
@@ -92,9 +91,7 @@ export default defineConfig(({ command, mode }) => {
         plugins: [
             autoAlias({
                 root: resolve(__dirname, './src'),
-                prefix: '@',
-                // 必须
-                jsonPath: resolve(__dirname, './jsconfig.json')
+                prefix: '@'
             })
         ]
     };
