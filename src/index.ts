@@ -1,14 +1,19 @@
 import { dirname, join, parse, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import type { Alias, PluginOption } from 'vite';
+import type { GetDirs } from './shared';
 import { getDirs, hasFile } from './shared';
-import HackJson from './HackJson';
-import type { AutoAlias, GetDirs } from './global';
+import { removeJson, syncJson } from './sync';
+
+export interface AutoAlias {
+    root: string;
+    prefix: string;
+}
 
 /**
  * @description 默认配置
  */
-const DEFAULT_CONFIG = {
+const DEFAULT_CONFIG: AutoAlias = {
     root: join(process.cwd(), 'src'),
     prefix: '@'
 };
@@ -19,6 +24,9 @@ const DEFAULT_CONFIG = {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ALIAS_JSON_PATH = resolve(__dirname, '../alias.json');
+
+const jsconfig = (root: string) => join(root, 'jsconfig.json');
+const tsconfig = (root: string) => join(root, 'tsconfig.json');
 
 /**
  * @description 生成数组
@@ -42,18 +50,24 @@ function genArrayAlias(dirs: GetDirs, root: string, prefix: string): Alias[] {
  */
 export default ({ root, prefix }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
     root = root ?? DEFAULT_CONFIG.root;
-    prefix = prefix || DEFAULT_CONFIG.prefix;
+    prefix = prefix ?? DEFAULT_CONFIG.prefix;
     if (!hasFile(root)) {
         return undefined;
     } else {
         const dirs = getDirs(root);
-        const writeConfig = new HackJson(root, ALIAS_JSON_PATH);
         return {
             name: 'vite-plugin-auto-alias',
             enforce: 'pre',
             config() {
                 const alias = genArrayAlias(dirs, root, prefix);
-                writeConfig.updateConfig(alias, prefix);
+                syncJson({
+                    extendJson: ALIAS_JSON_PATH,
+                    jsJson: jsconfig(process.cwd()),
+                    tsJson: tsconfig(process.cwd()),
+                    alias,
+                    root,
+                    prefix
+                });
                 return {
                     resolve: {
                         alias
@@ -62,18 +76,32 @@ export default ({ root, prefix }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
             },
             configureServer(server) {
                 server.watcher.on('all', (eventName, path) => {
-                    const { dir } = parse(path);
+                    const { dir, name: unlinkDirName } = parse(path);
                     if (dir === root) {
-                        switch (eventName) {
-                            case 'addDir':
-                            case 'unlinkDir':
-                                const alias = genArrayAlias(dirs, root, prefix);
-                                writeConfig.updateConfig(alias, prefix);
-                                break;
-                            default:
-                                break;
+                        if (eventName === 'addDir') {
+                            const alias = genArrayAlias(dirs, root, prefix);
+                            syncJson({
+                                extendJson: ALIAS_JSON_PATH,
+                                jsJson: jsconfig(process.cwd()),
+                                tsJson: tsconfig(process.cwd()),
+                                alias,
+                                root,
+                                prefix
+                            });
+                            server.restart();
                         }
-                        server.restart();
+
+                        if (eventName === 'unlinkDir') {
+                            removeJson({
+                                extendJson: ALIAS_JSON_PATH,
+                                jsJson: jsconfig(process.cwd()),
+                                tsJson: tsconfig(process.cwd()),
+                                unlinkDirName,
+                                root,
+                                prefix
+                            });
+                            server.restart();
+                        }
                     }
                 });
             }

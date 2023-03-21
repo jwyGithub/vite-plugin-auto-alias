@@ -22,16 +22,16 @@ export default defineConfig({
                 compilerOptions: {
                     declaration: true,
                     declarationMap: false,
-                    declarationDir: 'dist',
+                    declarationDir: 'dist/types',
                     allowJs: true
                 },
-                include: ['src/**/*'],
+                include: ['src/**/*', 'rollup.config.ts'],
                 exclude: ['rollup.config.ts']
             },
             clean: true,
             useTsconfigDeclarationDir: true
         })
     ],
-    external: ['vite', 'path', 'fs']
+    external: ['vite', 'path', 'fs', 'url']
 });
 

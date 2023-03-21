@@ -18,7 +18,7 @@
         }
     },
     "main": "./dist/index.cjs.js",
-    "types": "./dist/index.d.ts",
+    "types": "./dist/types/index.d.ts",
     "files": [
         "dist",
         "alias.json"
