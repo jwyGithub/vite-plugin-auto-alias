@@ -12,29 +12,60 @@ automatically generate alias based on path
 </p>
 <br />
 
-## install
+## Install
 
-#### with pnpm
+#### pnpm
 
 ```sh
 pnpm add vite-plugin-auto-alias -D
 ```
 
-#### with yarn
+#### yarn
 
 ```sh
 yarn add vite-plugin-auto-alias -D
 ```
 
-#### with npm
+#### npm
 
 ```sh
 npm install vite-plugin-auto-alias -D
 ```
 
-## use
+## Use
 
-#### with typescript project
+> vite.config.ts / vite.config.js
+
+```typescript
+import autoAlias from 'vite-plugin-auto-alias';
+
+export default defineConfig(({ command, mode }) => {
+    return {
+        plugins: [autoAlias()]
+    };
+});
+```
+
+## Option
+
+```typescript
+export interface AutoAlias {
+    // the root directory where the alias needs to be generated is src by default
+    root: string;
+    // prefix for generating aliases, default@
+    prefix: string;
+    // synchronize the mode of json configuration
+    mode: 'extends' | 'sync' | 'all';
+}
+```
+
+> mode
+
+-   extends: inheritance mode, only typescript projects are supported
+-   sync: synchronization mode, supporting typescript and javascript projects. When enabled, the generated paths will be automatically synchronized to tsconfig.json/jsconfig.json
+-   all: enable both inheritance mode and synchronization mode. The default is all
+
+### extends / all mode
 
 > vite.config.ts
 
@@ -43,83 +74,50 @@ import autoAlias from 'vite-plugin-auto-alias';
 
 export default defineConfig(({ command, mode }) => {
     return {
-        plugins: [autoAlias()]
-    };
-});
-```
-
-`define root path and config path`
-
-```typescript
-import autoAlias from 'vite-plugin-auto-alias';
-import { resolve } from 'path';
-
-export default defineConfig(({ command, mode }) => {
-    return {
         plugins: [
             autoAlias({
-                root: resolve(__dirname, './src'),
-                prefix: '@'
+                // ...
+                mode: 'extends'
             })
         ]
     };
 });
 ```
 
-#### with javascript project
-
-> vite.config.js
-
-```typescript
-import autoAlias from 'vite-plugin-auto-alias';
-
-export default defineConfig(({ command, mode }) => {
-    return {
-        plugins: [autoAlias()]
-    };
-});
-```
-
-`define root path and config path`
-
-```typescript
-import autoAlias from 'vite-plugin-auto-alias';
-import { resolve } from 'path';
-
-export default defineConfig(({ command, mode }) => {
-    return {
-        plugins: [
-            autoAlias({
-                root: resolve(__dirname, './src'),
-                prefix: '@'
-            })
-        ]
-    };
-});
-```
-
-## set tsconfig.json or jsconfig.json (important!!!)
+> tsconfig.json
 
 ```json
 {
     "extends": "./node_modules/vite-plugin-auto-alias/alias.json",
-    "baseUrl": "./"
-    // other config
+    "compilerOptions": {
+        "baseUrl": "./"
+        // ...
+    }
 }
 ```
 
-## Type
+### sync mode
+
+> vite.config.ts / vite.config.js
 
 ```typescript
-export type AutoAlias = {
-    root: string;
-    prefix: string;
-};
+import autoAlias from 'vite-plugin-auto-alias';
+
+export default defineConfig(({ command, mode }) => {
+    return {
+        plugins: [
+            autoAlias({
+                // ...
+                mode: 'sync'
+            })
+        ]
+    };
+});
 ```
 
-**tips : In order to get a better path prompt, be sure to configure the jsconfig.json file or tsconfig.json file in the project**
+**please ensure that the jsconfig.json file or tsconfig.json exists in the project**
 
-## example
+## Example
 
     |-- src
         |-- plugins

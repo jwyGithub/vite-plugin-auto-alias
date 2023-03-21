@@ -1,5 +1,5 @@
 {
-    "extends": "../../alias.json",
+    "extends": "./node_modules/vite-plugin-auto-alias/alias.json",
     "compilerOptions": {
         "target": "ESNext",
         "useDefineForClassFields": true,
@@ -10,34 +10,18 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "esModuleInterop": true,
-        "lib": [
-            "ESNext",
-            "DOM"
-        ],
+        "lib": ["ESNext", "DOM"],
         "skipLibCheck": true,
         "noEmit": true,
         "baseUrl": "./",
         "paths": {
-            "@/*": [
-                "src/*"
-            ],
-            "@assets/*": [
-                "src/assets/*"
-            ],
-            "@components/*": [
-                "src/components/*"
-            ],
-            "@diypath/*": [
-                "src/diypath/*"
-            ]
+            "@/*": ["src/*"],
+            "@assets/*": ["src/assets/*"],
+            "@components/*": ["src/components/*"],
+            "@diypath/*": ["src/diypath/*"]
         }
     },
-    "include": [
-        "src/**/*.ts",
-        "src/**/*.d.ts",
-        "src/**/*.tsx",
-        "src/**/*.vue"
-    ],
+    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
     "references": [
         {
             "path": "./tsconfig.node.json"

@@ -34,7 +34,38 @@ npm install vite-plugin-auto-alias -D
 
 ## 使用
 
-#### 在 typescript 项目中使用
+> vite.config.ts / vite.config.js
+
+```typescript
+import autoAlias from 'vite-plugin-auto-alias';
+
+export default defineConfig(({ command, mode }) => {
+    return {
+        plugins: [autoAlias()]
+    };
+});
+```
+
+## 配置
+
+```typescript
+export interface AutoAlias {
+    // 需要生成别名的根目录，默认src
+    root: string;
+    // 生成别名的前缀，默认@
+    prefix: string;
+    // 同步json配置的模式
+    mode: 'extends' | 'sync' | 'all';
+}
+```
+
+> mode
+
+-   extends: 继承模式，只支持 typescript 项目
+-   sync: 同步模式，支持 typescript 和 javascript 项目，开启后，生成的 paths 将自动同步至 tsconfig.json/jsconfig.json
+-   all: 同时开启继承模式和同步模式,默认为 all
+
+### extends / all 模式配置
 
 > vite.config.ts
 
@@ -43,81 +74,48 @@ import autoAlias from 'vite-plugin-auto-alias';
 
 export default defineConfig(({ command, mode }) => {
     return {
-        plugins: [autoAlias()]
-    };
-});
-```
-
-`自定义路径，别名以及json路径`
-
-```typescript
-import autoAlias from 'vite-plugin-auto-alias';
-import { resolve } from 'path';
-
-export default defineConfig(({ command, mode }) => {
-    return {
         plugins: [
             autoAlias({
-                root: resolve(__dirname, './src'),
-                prefix: '@'
+                // ...
+                mode: 'extends'
             })
         ]
     };
 });
 ```
 
-#### 在 javascript 项目中使用
-
-> vite.config.js
-
-```typescript
-import autoAlias from 'vite-plugin-auto-alias';
-
-export default defineConfig(({ command, mode }) => {
-    return {
-        plugins: [autoAlias()]
-    };
-});
-```
-
-`自定义路径，别名以及json路径`
-
-```typescript
-import autoAlias from 'vite-plugin-auto-alias';
-import { resolve } from 'path';
-
-export default defineConfig(({ command, mode }) => {
-    return {
-        plugins: [
-            autoAlias({
-                root: resolve(__dirname, './src'),
-                prefix: '@'
-            })
-        ]
-    };
-});
-```
-
-## 设置 tsconfig.json 或者 jsconfig.json
+> tsconfig.json
 
 ```json
 {
     "extends": "./node_modules/vite-plugin-auto-alias/alias.json",
-    "baseUrl": "./"
-    // other config
+    "compilerOptions": {
+        "baseUrl": "./"
+        // ...
+    }
 }
 ```
 
-## 类型
+### sync 模式配置
+
+> vite.config.ts / vite.config.js
 
 ```typescript
-export type AutoAlias = {
-    root: string;
-    prefix: string;
-};
+import autoAlias from 'vite-plugin-auto-alias';
+
+export default defineConfig(({ command, mode }) => {
+    return {
+        plugins: [
+            autoAlias({
+                // ...
+                mode: 'sync'
+            })
+        ]
+    };
+});
 ```
 
-**提示：为了获得更好的路径提示，请确保在项目中配置 jsconfig.json 文件或 tsconfig.json**
+**请确保在项目中存在 jsconfig.json 文件或 tsconfig.json**
 
 ## 示例
 

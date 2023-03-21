@@ -8,6 +8,7 @@ import { removeJson, syncJson } from './sync';
 export interface AutoAlias {
     root: string;
     prefix: string;
+    mode: 'extends' | 'sync' | 'all';
 }
 
 /**
@@ -15,7 +16,8 @@ export interface AutoAlias {
  */
 const DEFAULT_CONFIG: AutoAlias = {
     root: join(process.cwd(), 'src'),
-    prefix: '@'
+    prefix: '@',
+    mode: 'all'
 };
 
 /**
@@ -48,9 +50,10 @@ function genArrayAlias(dirs: GetDirs, root: string, prefix: string): Alias[] {
 /**
  * @description 入口函数
  */
-export default ({ root, prefix }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
+export default ({ root, prefix, mode }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
     root = root ?? DEFAULT_CONFIG.root;
     prefix = prefix ?? DEFAULT_CONFIG.prefix;
+    mode = mode ?? 'all';
     if (!hasFile(root)) {
         return undefined;
     } else {
@@ -66,7 +69,8 @@ export default ({ root, prefix }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                     tsJson: tsconfig(process.cwd()),
                     alias,
                     root,
-                    prefix
+                    prefix,
+                    mode
                 });
                 return {
                     resolve: {
@@ -86,7 +90,8 @@ export default ({ root, prefix }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                                 tsJson: tsconfig(process.cwd()),
                                 alias,
                                 root,
-                                prefix
+                                prefix,
+                                mode
                             });
                             server.restart();
                         }
@@ -98,7 +103,8 @@ export default ({ root, prefix }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                                 tsJson: tsconfig(process.cwd()),
                                 unlinkDirName,
                                 root,
-                                prefix
+                                prefix,
+                                mode
                             });
                             server.restart();
                         }
