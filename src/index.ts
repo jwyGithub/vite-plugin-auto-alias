@@ -6,15 +6,12 @@ import { getDirs, hasFile } from './shared';
 import { removeJson, syncJson } from './sync';
 
 export interface AutoAlias {
-    root: string;
-    prefix: string;
-    mode: 'extends' | 'sync' | 'all';
+    root?: string | undefined;
+    prefix?: string | undefined;
+    mode?: 'extends' | 'sync' | 'all';
 }
 
-/**
- * @description 默认配置
- */
-const DEFAULT_CONFIG: AutoAlias = {
+const DEFAULT_CONFIG: Required<AutoAlias> = {
     root: join(process.cwd(), 'src'),
     prefix: '@',
     mode: 'all'
@@ -47,13 +44,16 @@ function genArrayAlias(dirs: GetDirs, root: string, prefix: string): Alias[] {
     );
 }
 
-/**
- * @description 入口函数
- */
-export default ({ root, prefix, mode }: AutoAlias = DEFAULT_CONFIG): PluginOption => {
-    root = root ?? DEFAULT_CONFIG.root;
-    prefix = prefix ?? DEFAULT_CONFIG.prefix;
-    mode = mode ?? 'all';
+const mergeConfig = (baseConfig: AutoAlias): Required<AutoAlias> => {
+    return {
+        root: baseConfig.root ?? DEFAULT_CONFIG.root,
+        prefix: baseConfig.prefix ?? DEFAULT_CONFIG.prefix,
+        mode: baseConfig.mode ?? DEFAULT_CONFIG.mode
+    };
+};
+
+export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
+    const { root, prefix, mode } = mergeConfig(options);
     if (!hasFile(root)) {
         return undefined;
     } else {

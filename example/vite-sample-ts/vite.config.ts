@@ -4,6 +4,11 @@ import autoAlias from 'vite-plugin-auto-alias';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [vue(), autoAlias()]
+    plugins: [
+        vue(),
+        autoAlias({
+            root: ''
+        })
+    ]
 });
 
