@@ -50,11 +50,22 @@ export default defineConfig(({ command, mode }) => {
 
 ```typescript
 export interface AutoAlias {
-    // the root directory where the alias needs to be generated is src by default
+    /**
+     * @description the root directory where the alias needs to be generated is src by default
+     * @default src
+     */
     root: string;
-    // prefix for generating aliases, default@
+    
+    /**
+     * @description prefix for generating aliases
+     * @default @
+     */
     prefix: string;
-    // synchronize the mode of json configuration
+    
+    /**
+     * @description synchronize the mode of json configuration
+     * @default all
+     */
     mode: 'extends' | 'sync' | 'all';
 }
 ```
