@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [
         vue(),
         autoAlias({
-            root: ''
+            mode: 'all'
         })
     ]
 });

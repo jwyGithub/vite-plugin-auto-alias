@@ -29,6 +29,7 @@
         "lint": "eslint ."
     },
     "peerDependencies": {
+        "@jiangweiye/tsconfig": "*",
         "vite": "*"
     },
     "devDependencies": {
@@ -40,5 +41,8 @@
         "rollup-plugin-typescript2": "^0.34.1",
         "typescript": "^5.0.2",
         "vite": "^4.2.0"
+    },
+    "dependencies": {
+        "@jiangweiye/tsconfig": "0.0.4"
     }
 }

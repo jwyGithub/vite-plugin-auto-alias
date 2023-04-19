@@ -20,9 +20,7 @@ const DEFAULT_CONFIG: Required<AutoAlias> = {
 /**
  * @description 别名配置文件路径
  */
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const ALIAS_JSON_PATH = resolve(__dirname, '../alias.json');
+const ALIAS_JSON_PATH = resolve(process.cwd(), 'node_modules/@jiangweiye/tsconfig/tsconfig.alias.json');
 
 const jsconfig = (root: string) => join(root, 'jsconfig.json');
 const tsconfig = (root: string) => join(root, 'tsconfig.json');
