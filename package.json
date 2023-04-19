@@ -29,7 +29,8 @@
         "lint": "eslint ."
     },
     "peerDependencies": {
-        "vite": "*"
+        "vite": "*",
+        "@jiangweiye/tsconfig": "*"
     },
     "devDependencies": {
         "@jiangweiye/eslint-config": "^0.0.27",
@@ -43,3 +44,4 @@
         "vite": "^4.2.0"
     }
 }
+
