@@ -5,7 +5,7 @@ importers:
   .:
     specifiers:
       '@jiangweiye/eslint-config': ^0.0.27
-      '@jiangweiye/tsconfig': 0.0.4
+      '@jiangweiye/tsconfig': ^0.0.4
       '@types/node': ^18.15.3
       bumpp: ^9.0.0
       eslint: ^8.36.0
@@ -13,10 +13,9 @@ importers:
       rollup-plugin-typescript2: ^0.34.1
       typescript: ^5.0.2
       vite: ^4.2.0
-    dependencies:
-      '@jiangweiye/tsconfig': 0.0.4_@types+node@18.15.3
     devDependencies:
       '@jiangweiye/eslint-config': 0.0.27_j4766f7ecgqbon3u7zlxn5zszu
+      '@jiangweiye/tsconfig': 0.0.4_@types+node@18.15.3
       '@types/node': 18.15.3
       bumpp: 9.0.0
       eslint: 8.36.0
@@ -469,7 +468,7 @@ packages:
         optional: true
     dependencies:
       '@types/node': 18.15.3
-    dev: false
+    dev: true
 
   /@jsdevtools/ez-spawn/3.0.4:
     resolution: {integrity: sha512-f5DRIOZf7wxogefH03RjMPMdBF7ADTWUMoOs9kaJo06EfwF+aFhMZMDZxHg/Xe12hptN9xoZjGso2fdjapBRIA==}
@@ -526,6 +525,7 @@ packages:
 
   /@types/node/18.15.3:
     resolution: {integrity: sha512-p6ua9zBxz5otCmbpb5D3U4B5Nanw6Pk3PPyX05xnxbB/fRv71N7CPmORg7uAD5P70T0xmx1pzAx/FUfa5X+3cw==}
+    dev: true
 
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}

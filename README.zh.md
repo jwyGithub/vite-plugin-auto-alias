@@ -96,6 +96,8 @@ export default defineConfig(({ command, mode }) => {
 }
 ```
 
+**请确保安装了@jiangweiye/tsconfig**
+
 ### sync 模式配置
 
 > vite.config.ts / vite.config.js

@@ -55,13 +55,13 @@ export interface AutoAlias {
      * @default src
      */
     root: string;
-    
+
     /**
      * @description prefix for generating aliases
      * @default @
      */
     prefix: string;
-    
+
     /**
      * @description synchronize the mode of json configuration
      * @default all
@@ -99,13 +99,15 @@ export default defineConfig(({ command, mode }) => {
 
 ```json
 {
-    "extends": "./node_modules/vite-plugin-auto-alias/alias.json",
+    "extends": "@jiangweiye/tsconfig/tsconfig.alias.json",
     "compilerOptions": {
         "baseUrl": "./"
         // ...
     }
 }
 ```
+
+**please ensure that @jiangweiye/tsconfig is installed**
 
 ### sync mode
 
