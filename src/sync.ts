@@ -2,19 +2,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import { parse } from 'path';
 import type { Alias } from 'vite';
 import { hasFile } from './shared';
-
-export interface IPaths {
-    [key: string]: string[];
-}
-
-export interface IJson {
-    [key: string]: any;
-    compilerOptions: {
-        [key: string]: any;
-        baseUrl: string;
-        paths: IPaths;
-    };
-}
+import type { IJson, IPaths, Mode } from './type';
 
 /**
  * @description 获取json
@@ -120,7 +108,7 @@ export interface ISyncJson {
     alias: Alias[];
     prefix: string;
     root: string;
-    mode: 'extends' | 'sync' | 'all';
+    mode: Mode;
 }
 
 /**
@@ -155,7 +143,7 @@ export interface IRemoveJson {
     unlinkDirName: string;
     root: string;
     prefix: string;
-    mode: 'extends' | 'sync' | 'all';
+    mode: Mode;
 }
 
 export function removeJson({ extendJson, jsJson, tsJson, unlinkDirName, prefix, mode }: IRemoveJson) {

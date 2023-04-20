@@ -1,16 +1,12 @@
-import { dirname, join, parse, resolve } from 'path';
-import { fileURLToPath } from 'url';
+import { join, parse, resolve } from 'path';
 import type { Alias, PluginOption } from 'vite';
-import type { GetDirs } from './shared';
 import { getDirs, hasFile } from './shared';
 import { removeJson, syncJson } from './sync';
+import type { AutoAlias, GetDirs } from './type';
 
-export interface AutoAlias {
-    root?: string | undefined;
-    prefix?: string | undefined;
-    mode?: 'extends' | 'sync' | 'all';
-}
-
+/**
+ * @description 默认配置
+ */
 const DEFAULT_CONFIG: Required<AutoAlias> = {
     root: join(process.cwd(), 'src'),
     prefix: '@',
@@ -22,7 +18,18 @@ const DEFAULT_CONFIG: Required<AutoAlias> = {
  */
 const ALIAS_JSON_PATH = resolve(process.cwd(), 'node_modules/@jiangweiye/tsconfig/tsconfig.alias.json');
 
+/**
+ * @description jsconfig.json路径
+ * @param root string
+ * @returns  string
+ */
 const jsconfig = (root: string) => join(root, 'jsconfig.json');
+
+/**
+ * @description tsconfig.json路径
+ * @param root string
+ * @returns  string
+ */
 const tsconfig = (root: string) => join(root, 'tsconfig.json');
 
 /**
@@ -42,6 +49,11 @@ function genArrayAlias(dirs: GetDirs, root: string, prefix: string): Alias[] {
     );
 }
 
+/**
+ * @description 合并配置
+ * @param baseConfig AutoAlias
+ * @returns Required<AutoAlias>
+ */
 const mergeConfig = (baseConfig: AutoAlias): Required<AutoAlias> => {
     return {
         root: baseConfig.root ?? DEFAULT_CONFIG.root,
@@ -82,28 +94,30 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                     if (dir === root) {
                         if (eventName === 'addDir') {
                             const alias = genArrayAlias(dirs, root, prefix);
-                            syncJson({
-                                extendJson: ALIAS_JSON_PATH,
-                                jsJson: jsconfig(process.cwd()),
-                                tsJson: tsconfig(process.cwd()),
-                                alias,
-                                root,
-                                prefix,
-                                mode
-                            });
+                            mode !== 'off' &&
+                                syncJson({
+                                    extendJson: ALIAS_JSON_PATH,
+                                    jsJson: jsconfig(process.cwd()),
+                                    tsJson: tsconfig(process.cwd()),
+                                    alias,
+                                    root,
+                                    prefix,
+                                    mode
+                                });
                             server.restart();
                         }
 
                         if (eventName === 'unlinkDir') {
-                            removeJson({
-                                extendJson: ALIAS_JSON_PATH,
-                                jsJson: jsconfig(process.cwd()),
-                                tsJson: tsconfig(process.cwd()),
-                                unlinkDirName,
-                                root,
-                                prefix,
-                                mode
-                            });
+                            mode !== 'off' &&
+                                removeJson({
+                                    extendJson: ALIAS_JSON_PATH,
+                                    jsJson: jsconfig(process.cwd()),
+                                    tsJson: tsconfig(process.cwd()),
+                                    unlinkDirName,
+                                    root,
+                                    prefix,
+                                    mode
+                                });
                             server.restart();
                         }
                     }

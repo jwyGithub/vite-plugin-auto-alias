@@ -1,11 +1,7 @@
 import { existsSync, lstatSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { normalizePath } from 'vite';
-
-export type GetDirs = Array<{
-    dirName: string;
-    dirPath: string;
-}>;
+import type { GetDirs } from './type';
 
 /**
  * @description 是否是文件夹

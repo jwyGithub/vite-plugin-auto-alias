@@ -12,21 +12,27 @@
 </p>
 <br />
 
+## 特性
+
+-   支持热更新
+-   支持别名自定义
+-   支持同步模式自定义配置
+
 ## 安装
 
-#### 使用 pnpm
+#### pnpm
 
 ```sh
 pnpm add vite-plugin-auto-alias -D
 ```
 
-#### 使用 yarn
+#### yarn
 
 ```sh
 yarn add vite-plugin-auto-alias -D
 ```
 
-#### 使用 npm
+#### npm
 
 ```sh
 npm install vite-plugin-auto-alias -D
@@ -46,26 +52,33 @@ export default defineConfig(({ command, mode }) => {
 });
 ```
 
-## 配置
+## 配置项
 
 ```typescript
 export interface AutoAlias {
-    // 需要生成别名的根目录，默认src
+    /**
+     * @description 别名生成的路径
+     * @default src
+     */
     root: string;
-    // 生成别名的前缀，默认@
+
+    /**
+     * @description 别名前缀
+     * @default @
+     */
     prefix: string;
-    // 同步json配置的模式
-    mode: 'extends' | 'sync' | 'all';
+
+    /**
+     * @description json同步模式
+     * @default all
+     */
+    mode: 'extends' | 'sync' | 'all' | 'off';
 }
 ```
 
-> mode
+#### 关于 mode
 
--   extends: 继承模式，只支持 typescript 项目
--   sync: 同步模式，支持 typescript 和 javascript 项目，开启后，生成的 paths 将自动同步至 tsconfig.json/jsconfig.json
--   all: 同时开启继承模式和同步模式,默认为 all
-
-### extends / all 模式配置
+-   extends : 使用“extends”时，可以使用当前项目的 tsconfig.json 中的 extends 选项，其值为`@jiangweiye/tsconfig/tsconfig.alias.json`。因此，必须确保在项目中安装了`@jingweiye/tsconfig`。有关`@jiangweiye/tsconfig`的信息，请参阅[tsconfig](https://github.com/jwyGithub/tsconfig)
 
 > vite.config.ts
 
@@ -88,7 +101,7 @@ export default defineConfig(({ command, mode }) => {
 
 ```json
 {
-    "extends": "./node_modules/vite-plugin-auto-alias/alias.json",
+    "extends": "@jiangweiye/tsconfig/tsconfig.alias.json",
     "compilerOptions": {
         "baseUrl": "./"
         // ...
@@ -96,9 +109,7 @@ export default defineConfig(({ command, mode }) => {
 }
 ```
 
-**请确保安装了@jiangweiye/tsconfig**
-
-### sync 模式配置
+-   sync : 当使用`sync`时，插件会在当前项目的根目录中搜索`tsconfig.json`或`jsconfig.json`，因此请确保该文件存在于项目中。该插件将在运行时自动生成`paths`选项，然后将它们写入文件，而无需开发人员手动添加
 
 > vite.config.ts / vite.config.js
 
@@ -117,7 +128,16 @@ export default defineConfig(({ command, mode }) => {
 });
 ```
 
-**请确保在项目中存在 jsconfig.json 文件或 tsconfig.json**
+> tsconfig.json / jsconfig.json
+
+```json
+{
+    "compilerOptions": {
+        "baseUrl": "./"
+        // ...
+    }
+}
+```
 
 ## 示例
 

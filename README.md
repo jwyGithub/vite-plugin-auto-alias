@@ -12,8 +12,13 @@ automatically generate alias based on path
 </p>
 <br />
 
-## Install
+## Features
 
+-   Support for hot updates
+-   Support for custom alias prefixes
+-   Supports synchronous mode configuration
+
+## Install
 #### pnpm
 
 ```sh
@@ -66,17 +71,13 @@ export interface AutoAlias {
      * @description synchronize the mode of json configuration
      * @default all
      */
-    mode: 'extends' | 'sync' | 'all';
+    mode: 'extends' | 'sync' | 'all' | 'off';
 }
 ```
 
-> mode
+#### Mode
 
--   extends: inheritance mode, only typescript projects are supported
--   sync: synchronization mode, supporting typescript and javascript projects. When enabled, the generated paths will be automatically synchronized to tsconfig.json/jsconfig.json
--   all: enable both inheritance mode and synchronization mode. The default is all
-
-### extends / all mode
+-   extends : when use `extends`,you can use the extensions option in the tsconfig.json of the current project, with the value of `@jiangweiye/tsconfig/tsconfig.alias.json`. therefore, you must ensure that `@jiangweiye/tsconfig` is installed in the project. for information on `@jiangweiye/tsconfig`, please refer to the [tsconfig](https://github.com/jwyGithub/tsconfig)
 
 > vite.config.ts
 
@@ -107,9 +108,7 @@ export default defineConfig(({ command, mode }) => {
 }
 ```
 
-**please ensure that @jiangweiye/tsconfig is installed**
-
-### sync mode
+-   sync : when use `sync`,the plugin will search for `tsconfig.json` or `jsconfig.json` in the root directory of the current project, so please ensure that this file exists in the project. The plugin will automatically generate paths options when running, and then write them to the file without the need for developers to manually add them
 
 > vite.config.ts / vite.config.js
 
@@ -128,7 +127,16 @@ export default defineConfig(({ command, mode }) => {
 });
 ```
 
-**please ensure that the jsconfig.json file or tsconfig.json exists in the project**
+> tsconfig.json / jsconfig.json
+
+```json
+{
+    "compilerOptions": {
+        "baseUrl": "./"
+        // ...
+    }
+}
+```
 
 ## Example
 
