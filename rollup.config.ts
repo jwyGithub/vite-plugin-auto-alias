@@ -1,5 +1,6 @@
 import { defineConfig } from 'rollup';
 import ts from 'rollup-plugin-typescript2';
+import terser from '@rollup/plugin-terser';
 
 export default defineConfig({
     input: './src/index.ts',
@@ -30,7 +31,8 @@ export default defineConfig({
             },
             clean: true,
             useTsconfigDeclarationDir: true
-        })
+        }),
+        terser()
     ],
     external: ['vite', 'path', 'fs', 'url']
 });

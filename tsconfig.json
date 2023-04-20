@@ -1,8 +1,7 @@
 {
     "extends": "@jiangweiye/tsconfig/tsconfig.node.json",
     "compilerOptions": {
-        "lib": ["ESNext", "DOM"],
-        "ignoreDeprecations": "5.0"
+        "lib": ["ESNext", "DOM"]
     },
     "include": ["src/**/*", "rollup.config.ts"],
     "exclude": ["node_modules", "**/*.spec.ts", "example/**/*"]
