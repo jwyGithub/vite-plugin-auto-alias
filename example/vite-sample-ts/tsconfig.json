@@ -26,6 +26,12 @@
             ],
             "@components/*": [
                 "src/components/*"
+            ],
+            "@plugins/*": [
+                "src/plugins/*"
+            ],
+            "@utils/*": [
+                "src/utils/*"
             ]
         }
     },

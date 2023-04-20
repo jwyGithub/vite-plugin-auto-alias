@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [
         vue(),
         autoAlias({
-            mode: 'all'
+            mode: 'sync'
         })
     ]
 });
