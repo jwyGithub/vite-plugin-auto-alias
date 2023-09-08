@@ -146,23 +146,15 @@ export interface IRemoveJson {
     mode: Mode;
 }
 
+export function excutor(json: string, path: string) {
+    const newJson = removePath(path, getJson(json));
+    writeFileSync(json, JSON.stringify(newJson, null, 4));
+}
+
 export function removeJson({ extendJson, jsJson, tsJson, unlinkDirName, prefix, mode }: IRemoveJson) {
-    if (hasFile(extendJson) && ['all', 'extends'].includes(mode)) {
-        const _extendJson = getJson(extendJson);
-        const newJson = removePath(`${prefix}${unlinkDirName}/*`, _extendJson);
-        hasFile(extendJson) && writeFileSync(extendJson, JSON.stringify(newJson, null, 4));
-    }
-
-    if (hasFile(jsJson) && ['all', 'sync'].includes(mode)) {
-        const _jsJson = getJson(jsJson);
-        const newJson = removePath(`${prefix}${unlinkDirName}/*`, _jsJson);
-        hasFile(jsJson) && writeFileSync(jsJson, JSON.stringify(newJson, null, 4));
-    }
-
-    if (hasFile(tsJson) && ['all', 'sync'].includes(mode)) {
-        const _tsJson = getJson(tsJson);
-        const newJson = removePath(`${prefix}${unlinkDirName}/*`, _tsJson);
-        hasFile(tsJson) && writeFileSync(tsJson, JSON.stringify(newJson, null, 4));
-    }
+    const toRemovePath = `${prefix}${unlinkDirName}/*`;
+    hasFile(extendJson) && ['all', 'extends'].includes(mode) && excutor(extendJson, toRemovePath);
+    hasFile(jsJson) && ['all', 'sync'].includes(mode) && excutor(jsJson, toRemovePath);
+    hasFile(tsJson) && ['all', 'sync'].includes(mode) && excutor(tsJson, toRemovePath);
 }
 
