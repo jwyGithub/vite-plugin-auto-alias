@@ -14,14 +14,15 @@
     "exports": {
         ".": {
             "require": "./dist/index.cjs.js",
-            "import": "./dist/index.esm.js"
+            "import": "./dist/index.esm.js",
+            "types": "./dist/types/index.d.ts"
         }
     },
     "main": "./dist/index.cjs.js",
+    "module": "./dist/index.esm.js",
     "types": "./dist/types/index.d.ts",
     "files": [
-        "dist",
-        "alias.json"
+        "dist"
     ],
     "scripts": {
         "build": "rollup -c rollup.config.ts --configPlugin rollup-plugin-typescript2",
@@ -47,3 +48,4 @@
         "vite": "^4.2.0"
     }
 }
+
