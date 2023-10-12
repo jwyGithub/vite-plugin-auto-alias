@@ -3,7 +3,7 @@
     "compilerOptions": {
         "lib": ["ESNext", "DOM"]
     },
-    "include": ["src/**/*", "rollup.config.ts"],
+    "include": ["src/**/*", "tsup.config.ts"],
     "exclude": ["node_modules", "**/*.spec.ts", "example/**/*"]
 }
 
