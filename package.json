@@ -1,6 +1,6 @@
 {
     "name": "vite-plugin-auto-alias",
-    "version": "0.2.15",
+    "version": "0.2.16",
     "description": "automatically generate alias based on path",
     "author": "jiangweiye <jiangweiye@outlook.com> (https://github.com/jwyGithub)",
     "license": "MIT",
