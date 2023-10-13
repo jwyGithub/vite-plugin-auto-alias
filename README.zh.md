@@ -60,19 +60,25 @@ export interface AutoAlias {
      * @description 别名生成的路径
      * @default src
      */
-    root: string;
+    root?: string;
 
     /**
      * @description 别名前缀
      * @default @
      */
-    prefix: string;
+    prefix?: string;
 
     /**
      * @description json同步模式
      * @default all
      */
-    mode: 'extends' | 'sync' | 'all' | 'off';
+    mode?: 'extends' | 'sync' | 'all' | 'off';
+
+    /**
+     * @description tsconfig.json中extends路径
+     * @default @jiangweiye/tsconfig/tsconfig.alias.json
+     */
+    extendsPath?: string;
 }
 ```
 

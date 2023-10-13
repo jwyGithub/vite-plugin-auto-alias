@@ -19,6 +19,7 @@ automatically generate alias based on path
 -   Supports synchronous mode configuration
 
 ## Install
+
 #### pnpm
 
 ```sh
@@ -59,19 +60,25 @@ export interface AutoAlias {
      * @description the root directory where the alias needs to be generated is src by default
      * @default src
      */
-    root: string;
+    root?: string;
 
     /**
      * @description prefix for generating aliases
      * @default @
      */
-    prefix: string;
+    prefix?: string;
 
     /**
      * @description synchronize the mode of json configuration
      * @default all
      */
-    mode: 'extends' | 'sync' | 'all' | 'off';
+    mode?: 'extends' | 'sync' | 'all' | 'off';
+
+    /**
+     * @description tsconfig.json extends path
+     * @default @jiangweiye/tsconfig/tsconfig.alias.json
+     */
+    extendsPath?: string;
 }
 ```
 

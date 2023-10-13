@@ -5,18 +5,19 @@ import { removeJson, syncJson } from './sync';
 import type { AutoAlias, GetDirs } from './type';
 
 /**
+ * @description 别名配置文件路径
+ */
+const ALIAS_JSON_PATH = resolve(process.cwd(), 'node_modules/@jiangweiye/tsconfig/tsconfig.alias.json');
+
+/**
  * @description 默认配置
  */
 const DEFAULT_CONFIG: Required<AutoAlias> = {
     root: join(process.cwd(), 'src'),
     prefix: '@',
-    mode: 'all'
+    mode: 'all',
+    extendsPath: ALIAS_JSON_PATH
 };
-
-/**
- * @description 别名配置文件路径
- */
-const ALIAS_JSON_PATH = resolve(process.cwd(), 'node_modules/@jiangweiye/tsconfig/tsconfig.alias.json');
 
 /**
  * @description jsconfig.json路径
@@ -58,12 +59,13 @@ const mergeConfig = (baseConfig: AutoAlias): Required<AutoAlias> => {
     return {
         root: baseConfig.root ?? DEFAULT_CONFIG.root,
         prefix: baseConfig.prefix ?? DEFAULT_CONFIG.prefix,
-        mode: baseConfig.mode ?? DEFAULT_CONFIG.mode
+        mode: baseConfig.mode ?? DEFAULT_CONFIG.mode,
+        extendsPath: baseConfig.extendsPath ?? DEFAULT_CONFIG.extendsPath
     };
 };
 
 export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
-    const { root, prefix, mode } = mergeConfig(options);
+    const { root, prefix, mode, extendsPath } = mergeConfig(options);
     if (!hasFile(root)) {
         return undefined;
     } else {
@@ -96,7 +98,7 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                             const alias = genArrayAlias(dirs, root, prefix);
                             mode !== 'off' &&
                                 syncJson({
-                                    extendJson: ALIAS_JSON_PATH,
+                                    extendJson: extendsPath,
                                     jsJson: jsconfig(process.cwd()),
                                     tsJson: tsconfig(process.cwd()),
                                     alias,
@@ -110,7 +112,7 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                         if (eventName === 'unlinkDir') {
                             mode !== 'off' &&
                                 removeJson({
-                                    extendJson: ALIAS_JSON_PATH,
+                                    extendJson: extendsPath,
                                     jsJson: jsconfig(process.cwd()),
                                     tsJson: tsconfig(process.cwd()),
                                     unlinkDirName,

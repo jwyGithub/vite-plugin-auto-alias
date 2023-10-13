@@ -1,7 +1,10 @@
+export type Mode = 'extends' | 'sync' | 'all' | 'off';
+
 export interface AutoAlias {
     root?: string | undefined;
     prefix?: string | undefined;
-    mode?: 'extends' | 'sync' | 'all' | 'off';
+    mode?: Mode;
+    extendsPath?: string;
 }
 
 export type GetDirs = Array<{
@@ -22,4 +25,3 @@ export interface IJson {
     };
 }
 
-export type Mode = 'extends' | 'sync' | 'all' | 'off';

@@ -12,7 +12,7 @@ export default defineConfig({
     dts: true,
     target: ['node12'],
     format: ['esm', 'cjs'],
-    minify: true,
+    minify: false,
     clean: true,
     tsconfig: path.resolve(__dirname, './tsconfig.json')
 });
