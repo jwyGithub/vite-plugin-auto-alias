@@ -29,7 +29,7 @@
     ],
     "scripts": {
         "build": "tsup",
-        "release": "npm run build && bumpp package.json --commit --push --tag && npm publish --access=public",
+        "release": "npm run build && bumpp package.json --commit --push && npm publish --access=public",
         "lint": "eslint ."
     },
     "peerDependencies": {
