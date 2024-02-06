@@ -23,6 +23,7 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm run build
+      - run: npm version patch
 
   publish-npm:
     needs: build
