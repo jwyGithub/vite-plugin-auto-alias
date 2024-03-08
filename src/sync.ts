@@ -102,7 +102,7 @@ export function genJson(alias: Alias[], root: string, prefix: string): IJson {
 }
 
 export interface ISyncJson {
-    extendJson: string;
+    aliasPath: string;
     jsJson: string;
     tsJson: string;
     alias: Alias[];
@@ -117,18 +117,21 @@ export interface ISyncJson {
  * @param jsJson jsconfig.json
  * @param tsJson tsconfig.json
  */
-export function syncJson({ extendJson, jsJson, tsJson, alias, prefix, root, mode }: ISyncJson) {
-    if (hasFile(extendJson) && ['all', 'extends'].includes(mode)) {
+export function syncJson({ aliasPath, jsJson, tsJson, alias, prefix, root, mode }: ISyncJson) {
+    // 如果存在自定义的aliasPath文件，且mode为sync，则将alias写入到aliasPath文件中
+    if (hasFile(aliasPath) && mode === 'sync') {
         const json = genJson(alias, root, prefix);
-        hasFile(extendJson) && writeFileSync(extendJson, JSON.stringify(json, null, 4));
+        hasFile(aliasPath) && writeFileSync(aliasPath, JSON.stringify(json, null, 4));
+        return;
     }
-    if (hasFile(jsJson) && ['all', 'sync'].includes(mode)) {
+
+    if (hasFile(jsJson) && mode === 'sync') {
         const target = genJson(alias, root, prefix);
         const source = getJson(jsJson);
         const newJson = mergeJson(target, source);
         hasFile(jsJson) && writeFileSync(jsJson, JSON.stringify(newJson, null, 4));
     }
-    if (hasFile(tsJson) && ['all', 'sync'].includes(mode)) {
+    if (hasFile(tsJson) && mode === 'sync') {
         const target = genJson(alias, root, prefix);
         const source = getJson(tsJson);
         const newJson = mergeJson(target, source);
@@ -137,7 +140,7 @@ export function syncJson({ extendJson, jsJson, tsJson, alias, prefix, root, mode
 }
 
 export interface IRemoveJson {
-    extendJson: string;
+    aliasPath: string;
     jsJson: string;
     tsJson: string;
     unlinkDirName: string;
@@ -151,10 +154,10 @@ export function excutor(json: string, path: string) {
     writeFileSync(json, JSON.stringify(newJson, null, 4));
 }
 
-export function removeJson({ extendJson, jsJson, tsJson, unlinkDirName, prefix, mode }: IRemoveJson) {
+export function removeJson({ aliasPath, jsJson, tsJson, unlinkDirName, prefix, mode }: IRemoveJson) {
     const toRemovePath = `${prefix}${unlinkDirName}/*`;
-    hasFile(extendJson) && ['all', 'extends'].includes(mode) && excutor(extendJson, toRemovePath);
-    hasFile(jsJson) && ['all', 'sync'].includes(mode) && excutor(jsJson, toRemovePath);
-    hasFile(tsJson) && ['all', 'sync'].includes(mode) && excutor(tsJson, toRemovePath);
+    hasFile(aliasPath) && mode === 'sync' && excutor(aliasPath, toRemovePath);
+    hasFile(jsJson) && mode === 'sync' && excutor(jsJson, toRemovePath);
+    hasFile(tsJson) && mode === 'sync' && excutor(tsJson, toRemovePath);
 }
 

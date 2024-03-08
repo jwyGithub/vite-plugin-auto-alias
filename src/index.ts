@@ -1,13 +1,8 @@
-import { join, parse, resolve } from 'path';
+import { join, parse } from 'path';
 import type { Alias, PluginOption } from 'vite';
 import { getDirs, hasFile } from './shared';
 import { removeJson, syncJson } from './sync';
 import type { AutoAlias, GetDirs } from './type';
-
-/**
- * @description 别名配置文件路径
- */
-const ALIAS_JSON_PATH = resolve(process.cwd(), 'node_modules/@jiangweiye/tsconfig/tsconfig.alias.json');
 
 /**
  * @description 默认配置
@@ -15,8 +10,8 @@ const ALIAS_JSON_PATH = resolve(process.cwd(), 'node_modules/@jiangweiye/tsconfi
 const DEFAULT_CONFIG: Required<AutoAlias> = {
     root: join(process.cwd(), 'src'),
     prefix: '@',
-    mode: 'all',
-    extendsPath: ALIAS_JSON_PATH
+    mode: 'sync',
+    aliasPath: join(process.cwd(), 'tsconfig.json')
 };
 
 /**
@@ -60,12 +55,12 @@ const mergeConfig = (baseConfig: AutoAlias): Required<AutoAlias> => {
         root: baseConfig.root ?? DEFAULT_CONFIG.root,
         prefix: baseConfig.prefix ?? DEFAULT_CONFIG.prefix,
         mode: baseConfig.mode ?? DEFAULT_CONFIG.mode,
-        extendsPath: baseConfig.extendsPath ?? DEFAULT_CONFIG.extendsPath
+        aliasPath: baseConfig.aliasPath ?? DEFAULT_CONFIG.aliasPath
     };
 };
 
 export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
-    const { root, prefix, mode, extendsPath } = mergeConfig(options);
+    const { root, prefix, mode, aliasPath } = mergeConfig(options);
     if (!hasFile(root)) {
         return undefined;
     } else {
@@ -76,7 +71,7 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
             config() {
                 const alias = genArrayAlias(dirs, root, prefix);
                 syncJson({
-                    extendJson: ALIAS_JSON_PATH,
+                    aliasPath: aliasPath,
                     jsJson: jsconfig(process.cwd()),
                     tsJson: tsconfig(process.cwd()),
                     alias,
@@ -98,7 +93,7 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                             const alias = genArrayAlias(dirs, root, prefix);
                             mode !== 'off' &&
                                 syncJson({
-                                    extendJson: extendsPath,
+                                    aliasPath: aliasPath,
                                     jsJson: jsconfig(process.cwd()),
                                     tsJson: tsconfig(process.cwd()),
                                     alias,
@@ -112,7 +107,7 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                         if (eventName === 'unlinkDir') {
                             mode !== 'off' &&
                                 removeJson({
-                                    extendJson: extendsPath,
+                                    aliasPath: aliasPath,
                                     jsJson: jsconfig(process.cwd()),
                                     tsJson: tsconfig(process.cwd()),
                                     unlinkDirName,

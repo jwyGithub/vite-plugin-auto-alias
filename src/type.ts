@@ -1,10 +1,10 @@
-export type Mode = 'extends' | 'sync' | 'all' | 'off';
+export type Mode = 'sync' | 'off';
 
 export interface AutoAlias {
     root?: string | undefined;
     prefix?: string | undefined;
     mode?: Mode;
-    extendsPath?: string;
+    aliasPath?: string;
 }
 
 export type GetDirs = Array<{
