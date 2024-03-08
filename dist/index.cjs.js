@@ -118,27 +118,19 @@ function genJson(alias, root, prefix) {
   };
 }
 __name(genJson, "genJson");
-function syncJson({ extendJson, jsJson, tsJson, alias, prefix, root, mode }) {
-  if (hasFile(extendJson) && [
-    "all",
-    "extends"
-  ].includes(mode)) {
+function syncJson({ aliasPath, jsJson, tsJson, alias, prefix, root, mode }) {
+  if (hasFile(aliasPath) && mode === "sync") {
     const json = genJson(alias, root, prefix);
-    hasFile(extendJson) && (0, import_fs2.writeFileSync)(extendJson, JSON.stringify(json, null, 4));
+    hasFile(aliasPath) && (0, import_fs2.writeFileSync)(aliasPath, JSON.stringify(json, null, 4));
+    return;
   }
-  if (hasFile(jsJson) && [
-    "all",
-    "sync"
-  ].includes(mode)) {
+  if (hasFile(jsJson) && mode === "sync") {
     const target = genJson(alias, root, prefix);
     const source = getJson(jsJson);
     const newJson = mergeJson(target, source);
     hasFile(jsJson) && (0, import_fs2.writeFileSync)(jsJson, JSON.stringify(newJson, null, 4));
   }
-  if (hasFile(tsJson) && [
-    "all",
-    "sync"
-  ].includes(mode)) {
+  if (hasFile(tsJson) && mode === "sync") {
     const target = genJson(alias, root, prefix);
     const source = getJson(tsJson);
     const newJson = mergeJson(target, source);
@@ -151,30 +143,20 @@ function excutor(json, path) {
   (0, import_fs2.writeFileSync)(json, JSON.stringify(newJson, null, 4));
 }
 __name(excutor, "excutor");
-function removeJson({ extendJson, jsJson, tsJson, unlinkDirName, prefix, mode }) {
+function removeJson({ aliasPath, jsJson, tsJson, unlinkDirName, prefix, mode }) {
   const toRemovePath = `${prefix}${unlinkDirName}/*`;
-  hasFile(extendJson) && [
-    "all",
-    "extends"
-  ].includes(mode) && excutor(extendJson, toRemovePath);
-  hasFile(jsJson) && [
-    "all",
-    "sync"
-  ].includes(mode) && excutor(jsJson, toRemovePath);
-  hasFile(tsJson) && [
-    "all",
-    "sync"
-  ].includes(mode) && excutor(tsJson, toRemovePath);
+  hasFile(aliasPath) && mode === "sync" && excutor(aliasPath, toRemovePath);
+  hasFile(jsJson) && mode === "sync" && excutor(jsJson, toRemovePath);
+  hasFile(tsJson) && mode === "sync" && excutor(tsJson, toRemovePath);
 }
 __name(removeJson, "removeJson");
 
 // src/index.ts
-var ALIAS_JSON_PATH = (0, import_path3.resolve)(process.cwd(), "node_modules/@jiangweiye/tsconfig/tsconfig.alias.json");
 var DEFAULT_CONFIG = {
   root: (0, import_path3.join)(process.cwd(), "src"),
   prefix: "@",
-  mode: "all",
-  extendsPath: ALIAS_JSON_PATH
+  mode: "sync",
+  aliasPath: (0, import_path3.join)(process.cwd(), "tsconfig.json")
 };
 var jsconfig = /* @__PURE__ */ __name((root) => (0, import_path3.join)(root, "jsconfig.json"), "jsconfig");
 var tsconfig = /* @__PURE__ */ __name((root) => (0, import_path3.join)(root, "tsconfig.json"), "tsconfig");
@@ -199,11 +181,11 @@ var mergeConfig = /* @__PURE__ */ __name((baseConfig) => {
     root: (_a = baseConfig.root) != null ? _a : DEFAULT_CONFIG.root,
     prefix: (_b = baseConfig.prefix) != null ? _b : DEFAULT_CONFIG.prefix,
     mode: (_c = baseConfig.mode) != null ? _c : DEFAULT_CONFIG.mode,
-    extendsPath: (_d = baseConfig.extendsPath) != null ? _d : DEFAULT_CONFIG.extendsPath
+    aliasPath: (_d = baseConfig.aliasPath) != null ? _d : DEFAULT_CONFIG.aliasPath
   };
 }, "mergeConfig");
 var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
-  const { root, prefix, mode, extendsPath } = mergeConfig(options);
+  const { root, prefix, mode, aliasPath } = mergeConfig(options);
   if (!hasFile(root)) {
     return void 0;
   } else {
@@ -214,7 +196,7 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
       config() {
         const alias = genArrayAlias(dirs, root, prefix);
         syncJson({
-          extendJson: ALIAS_JSON_PATH,
+          aliasPath,
           jsJson: jsconfig(process.cwd()),
           tsJson: tsconfig(process.cwd()),
           alias,
@@ -235,7 +217,7 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
             if (eventName === "addDir") {
               const alias = genArrayAlias(dirs, root, prefix);
               mode !== "off" && syncJson({
-                extendJson: extendsPath,
+                aliasPath,
                 jsJson: jsconfig(process.cwd()),
                 tsJson: tsconfig(process.cwd()),
                 alias,
@@ -247,7 +229,7 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
             }
             if (eventName === "unlinkDir") {
               mode !== "off" && removeJson({
-                extendJson: extendsPath,
+                aliasPath,
                 jsJson: jsconfig(process.cwd()),
                 tsJson: tsconfig(process.cwd()),
                 unlinkDirName,

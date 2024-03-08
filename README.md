@@ -72,48 +72,17 @@ export interface AutoAlias {
      * @description synchronize the mode of json configuration
      * @default all
      */
-    mode?: 'extends' | 'sync' | 'all' | 'off';
+    mode?: 'sync' | 'off';
 
     /**
-     * @description tsconfig.json extends path
-     * @default @jiangweiye/tsconfig/tsconfig.alias.json
+     * @description alias configuration file path
+     * @default tsconfig.json
      */
-    extendsPath?: string;
+    aliasPath?: string;
 }
 ```
 
 #### Mode
-
--   extends : when use `extends`,you can use the extensions option in the tsconfig.json of the current project, with the value of `@jiangweiye/tsconfig/tsconfig.alias.json`. therefore, you must ensure that `@jiangweiye/tsconfig` is installed in the project. for information on `@jiangweiye/tsconfig`, please refer to the [tsconfig](https://github.com/jwyGithub/tsconfig)
-
-> vite.config.ts
-
-```typescript
-import autoAlias from 'vite-plugin-auto-alias';
-
-export default defineConfig(({ command, mode }) => {
-    return {
-        plugins: [
-            autoAlias({
-                // ...
-                mode: 'extends'
-            })
-        ]
-    };
-});
-```
-
-> tsconfig.json
-
-```json
-{
-    "extends": "@jiangweiye/tsconfig/tsconfig.alias.json",
-    "compilerOptions": {
-        "baseUrl": "./"
-        // ...
-    }
-}
-```
 
 -   sync : when use `sync`,the plugin will search for `tsconfig.json` or `jsconfig.json` in the root directory of the current project, so please ensure that this file exists in the project. The plugin will automatically generate paths options when running, and then write them to the file without the need for developers to manually add them
 

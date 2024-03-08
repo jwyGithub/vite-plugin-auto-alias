@@ -1,7 +1,7 @@
 {
     "name": "vite-plugin-auto-alias",
     "type": "module",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "automatically generate alias based on path",
     "author": "jiangweiye <jiangweiye@outlook.com> (https://github.com/jwyGithub)",
     "license": "MIT",
@@ -35,18 +35,15 @@
     "peerDependencies": {
         "vite": "*"
     },
-    "optionalDependencies": {
-        "@jiangweiye/tsconfig": "*"
-    },
     "devDependencies": {
-        "@jiangweiye/eslint-config": "^0.0.30",
-        "@jiangweiye/tsconfig": "0.0.6",
-        "@swc/core": "^1.3.92",
-        "@types/node": "^18.15.3",
-        "bumpp": "^9.0.0",
-        "eslint": "^8.49.0",
+        "@jiangweiye/eslint-config": "0.1.1",
+        "@jiangweiye/tsconfig": "0.0.9",
+        "@swc/core": "^1.4.6",
+        "@types/node": "^18.19.22",
+        "bumpp": "^9.4.0",
+        "eslint": "^8.57.0",
         "tsup": "^7.2.0",
-        "typescript": "^4.9.5",
-        "vite": "^4.2.0"
+        "typescript": "^5.0.2",
+        "vite": "^4.5.2"
     }
 }

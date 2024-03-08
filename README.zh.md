@@ -72,48 +72,17 @@ export interface AutoAlias {
      * @description json同步模式
      * @default all
      */
-    mode?: 'extends' | 'sync' | 'all' | 'off';
+    mode?: 'sync' | 'off';
 
     /**
-     * @description tsconfig.json中extends路径
-     * @default @jiangweiye/tsconfig/tsconfig.alias.json
+     * @description 别名配置文件路径
+     * @default tsconfig.json
      */
-    extendsPath?: string;
+    aliasPath?: string;
 }
 ```
 
 #### 关于 mode
-
--   extends : 使用“extends”时，可以使用当前项目的 tsconfig.json 中的 extends 选项，其值为`@jiangweiye/tsconfig/tsconfig.alias.json`。因此，必须确保在项目中安装了`@jingweiye/tsconfig`。有关`@jiangweiye/tsconfig`的信息，请参阅[tsconfig](https://github.com/jwyGithub/tsconfig)
-
-> vite.config.ts
-
-```typescript
-import autoAlias from 'vite-plugin-auto-alias';
-
-export default defineConfig(({ command, mode }) => {
-    return {
-        plugins: [
-            autoAlias({
-                // ...
-                mode: 'extends'
-            })
-        ]
-    };
-});
-```
-
-> tsconfig.json
-
-```json
-{
-    "extends": "@jiangweiye/tsconfig/tsconfig.alias.json",
-    "compilerOptions": {
-        "baseUrl": "./"
-        // ...
-    }
-}
-```
 
 -   sync : 当使用`sync`时，插件会在当前项目的根目录中搜索`tsconfig.json`或`jsconfig.json`，因此请确保该文件存在于项目中。该插件将在运行时自动生成`paths`选项，然后将它们写入文件，而无需开发人员手动添加
 

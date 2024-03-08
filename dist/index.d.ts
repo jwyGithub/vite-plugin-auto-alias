@@ -1,11 +1,11 @@
 import { PluginOption } from 'vite';
 
-type Mode = 'extends' | 'sync' | 'all' | 'off';
+type Mode = 'sync' | 'off';
 interface AutoAlias {
     root?: string | undefined;
     prefix?: string | undefined;
     mode?: Mode;
-    extendsPath?: string;
+    aliasPath?: string;
 }
 
 declare const _default: (options?: AutoAlias) => PluginOption;
