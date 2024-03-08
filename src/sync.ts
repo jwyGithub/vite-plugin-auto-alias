@@ -121,9 +121,9 @@ export function syncJson({ aliasPath, jsJson, tsJson, alias, prefix, root, mode 
     // 如果存在自定义的aliasPath文件，且mode为sync，则将alias写入到aliasPath文件中
     if (aliasPath && hasFile(aliasPath) && mode === 'sync') {
         const target = genJson(alias, root, prefix);
-        const source = getJson(jsJson);
+        const source = getJson(aliasPath);
         const newJson = mergeJson(target, source);
-        hasFile(jsJson) && writeFileSync(jsJson, JSON.stringify(newJson, null, 4));
+        hasFile(aliasPath) && writeFileSync(aliasPath, JSON.stringify(newJson, null, 4));
         return;
     }
 

@@ -121,9 +121,9 @@ __name(genJson, "genJson");
 function syncJson({ aliasPath, jsJson, tsJson, alias, prefix, root, mode }) {
   if (aliasPath && hasFile(aliasPath) && mode === "sync") {
     const target = genJson(alias, root, prefix);
-    const source = getJson(jsJson);
+    const source = getJson(aliasPath);
     const newJson = mergeJson(target, source);
-    hasFile(jsJson) && (0, import_fs2.writeFileSync)(jsJson, JSON.stringify(newJson, null, 4));
+    hasFile(aliasPath) && (0, import_fs2.writeFileSync)(aliasPath, JSON.stringify(newJson, null, 4));
     return;
   }
   if (hasFile(jsJson) && mode === "sync") {
