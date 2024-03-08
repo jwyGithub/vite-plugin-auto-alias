@@ -11,7 +11,7 @@ const DEFAULT_CONFIG: Required<AutoAlias> = {
     root: join(process.cwd(), 'src'),
     prefix: '@',
     mode: 'sync',
-    aliasPath: join(process.cwd(), 'tsconfig.json')
+    aliasPath: null
 };
 
 /**

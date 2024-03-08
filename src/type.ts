@@ -4,7 +4,7 @@ export interface AutoAlias {
     root?: string | undefined;
     prefix?: string | undefined;
     mode?: Mode;
-    aliasPath?: string;
+    aliasPath?: string | null;
 }
 
 export type GetDirs = Array<{
