@@ -119,9 +119,11 @@ function genJson(alias, root, prefix) {
 }
 __name(genJson, "genJson");
 function syncJson({ aliasPath, jsJson, tsJson, alias, prefix, root, mode }) {
-  if (hasFile(aliasPath) && mode === "sync") {
-    const json = genJson(alias, root, prefix);
-    hasFile(aliasPath) && (0, import_fs2.writeFileSync)(aliasPath, JSON.stringify(json, null, 4));
+  if (aliasPath && hasFile(aliasPath) && mode === "sync") {
+    const target = genJson(alias, root, prefix);
+    const source = getJson(jsJson);
+    const newJson = mergeJson(target, source);
+    hasFile(jsJson) && (0, import_fs2.writeFileSync)(jsJson, JSON.stringify(newJson, null, 4));
     return;
   }
   if (hasFile(jsJson) && mode === "sync") {
@@ -145,7 +147,7 @@ function excutor(json, path) {
 __name(excutor, "excutor");
 function removeJson({ aliasPath, jsJson, tsJson, unlinkDirName, prefix, mode }) {
   const toRemovePath = `${prefix}${unlinkDirName}/*`;
-  hasFile(aliasPath) && mode === "sync" && excutor(aliasPath, toRemovePath);
+  aliasPath && hasFile(aliasPath) && mode === "sync" && excutor(aliasPath, toRemovePath);
   hasFile(jsJson) && mode === "sync" && excutor(jsJson, toRemovePath);
   hasFile(tsJson) && mode === "sync" && excutor(tsJson, toRemovePath);
 }
@@ -156,7 +158,7 @@ var DEFAULT_CONFIG = {
   root: (0, import_path3.join)(process.cwd(), "src"),
   prefix: "@",
   mode: "sync",
-  aliasPath: (0, import_path3.join)(process.cwd(), "tsconfig.json")
+  aliasPath: null
 };
 var jsconfig = /* @__PURE__ */ __name((root) => (0, import_path3.join)(root, "jsconfig.json"), "jsconfig");
 var tsconfig = /* @__PURE__ */ __name((root) => (0, import_path3.join)(root, "tsconfig.json"), "tsconfig");

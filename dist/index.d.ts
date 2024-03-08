@@ -5,7 +5,7 @@ interface AutoAlias {
     root?: string | undefined;
     prefix?: string | undefined;
     mode?: Mode;
-    aliasPath?: string;
+    aliasPath?: string | null;
 }
 
 declare const _default: (options?: AutoAlias) => PluginOption;
