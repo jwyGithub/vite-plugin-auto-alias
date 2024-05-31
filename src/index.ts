@@ -1,4 +1,5 @@
-import { join, parse } from 'path';
+import { join, parse } from 'node:path';
+import process from 'node:process';
 import type { Alias, PluginOption } from 'vite';
 import { getDirs, hasFile } from './shared';
 import { removeJson, syncJson } from './sync';
@@ -30,10 +31,10 @@ const tsconfig = (root: string) => join(root, 'tsconfig.json');
 
 /**
  * @description 生成数组
- * @param dir GetDirs
+ * @param dirs GetDirs
  * @param root string
  * @param prefix string
- * @returns {Alias[]}
+ * @returns {Alias[]} Alias[]
  */
 function genArrayAlias(dirs: GetDirs, root: string, prefix: string): Alias[] {
     return dirs.reduce<Alias[]>(
@@ -71,7 +72,7 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
             config() {
                 const alias = genArrayAlias(dirs, root, prefix);
                 syncJson({
-                    aliasPath: aliasPath,
+                    aliasPath,
                     jsJson: jsconfig(process.cwd()),
                     tsJson: tsconfig(process.cwd()),
                     alias,
@@ -93,7 +94,7 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                             const alias = genArrayAlias(dirs, root, prefix);
                             mode !== 'off' &&
                                 syncJson({
-                                    aliasPath: aliasPath,
+                                    aliasPath,
                                     jsJson: jsconfig(process.cwd()),
                                     tsJson: tsconfig(process.cwd()),
                                     alias,
@@ -107,7 +108,7 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                         if (eventName === 'unlinkDir') {
                             mode !== 'off' &&
                                 removeJson({
-                                    aliasPath: aliasPath,
+                                    aliasPath,
                                     jsJson: jsconfig(process.cwd()),
                                     tsJson: tsconfig(process.cwd()),
                                     unlinkDirName,
@@ -123,4 +124,3 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
         };
     }
 };
-

@@ -1,9 +1,9 @@
 {
     "extends": "@jiangweiye/tsconfig/tsconfig.node.json",
     "compilerOptions": {
+        "composite": false,
         "lib": ["ESNext", "DOM"]
     },
     "include": ["src/**/*", "tsup.config.ts"],
     "exclude": ["node_modules", "**/*.spec.ts", "example/**/*"]
 }
-

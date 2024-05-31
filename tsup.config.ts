@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
@@ -16,4 +16,3 @@ export default defineConfig({
     clean: true,
     tsconfig: path.resolve(__dirname, './tsconfig.json')
 });
-

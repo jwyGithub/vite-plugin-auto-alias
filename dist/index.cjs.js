@@ -1,6 +1,8 @@
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __export = (target, all) => {
@@ -15,6 +17,14 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
@@ -23,22 +33,23 @@ __export(src_exports, {
   default: () => src_default
 });
 module.exports = __toCommonJS(src_exports);
-var import_path3 = require("path");
+var import_node_path3 = require("path");
+var import_node_process2 = __toESM(require("process"), 1);
 
 // src/shared.ts
-var import_fs = require("fs");
-var import_path = require("path");
+var import_node_fs = require("fs");
+var import_node_path = require("path");
 var import_vite = require("vite");
 var isDir = /* @__PURE__ */ __name((path) => {
-  return (0, import_fs.lstatSync)(path).isDirectory();
+  return (0, import_node_fs.lstatSync)(path).isDirectory();
 }, "isDir");
 var hasFile = /* @__PURE__ */ __name((path) => {
-  return (0, import_fs.existsSync)(path);
+  return (0, import_node_fs.existsSync)(path);
 }, "hasFile");
 var getDirs = /* @__PURE__ */ __name((path) => {
-  const dirs = (0, import_fs.readdirSync)(path);
+  const dirs = (0, import_node_fs.readdirSync)(path);
   return dirs.reduce((result, name) => {
-    const fullPath = (0, import_path.join)(path, name);
+    const fullPath = (0, import_node_path.join)(path, name);
     isDir(fullPath) && result.push({
       dirName: name,
       dirPath: (0, import_vite.normalizePath)(fullPath)
@@ -48,14 +59,15 @@ var getDirs = /* @__PURE__ */ __name((path) => {
 }, "getDirs");
 
 // src/sync.ts
-var import_fs2 = require("fs");
-var import_path2 = require("path");
+var import_node_fs2 = require("fs");
+var import_node_path2 = require("path");
+var import_node_process = __toESM(require("process"), 1);
 function getJson(jsonPath) {
   try {
-    const jsonText = (0, import_fs2.readFileSync)(jsonPath, "utf-8");
+    const jsonText = (0, import_node_fs2.readFileSync)(jsonPath, "utf-8");
     return JSON.parse(jsonText);
   } catch (error) {
-    process.exit(0);
+    import_node_process.default.exit(0);
   }
 }
 __name(getJson, "getJson");
@@ -90,7 +102,7 @@ function removePath(pathKey, source) {
 }
 __name(removePath, "removePath");
 function convertToJsonPath(root, { find, prefix }) {
-  const { name } = (0, import_path2.parse)(root);
+  const { name } = (0, import_node_path2.parse)(root);
   const pathKey = typeof find === "string" ? `${find}/*` : `${find.source.replace("^", "")}/*`;
   const pathValue = typeof find === "string" ? `${name}/${find}/*`.replace(new RegExp(`${prefix}/`), "") : `${name}/${find.source.replace(`^${prefix}`, "")}/*`;
   return {
@@ -123,26 +135,26 @@ function syncJson({ aliasPath, jsJson, tsJson, alias, prefix, root, mode }) {
     const target = genJson(alias, root, prefix);
     const source = getJson(aliasPath);
     const newJson = mergeJson(target, source);
-    hasFile(aliasPath) && (0, import_fs2.writeFileSync)(aliasPath, JSON.stringify(newJson, null, 4));
+    hasFile(aliasPath) && (0, import_node_fs2.writeFileSync)(aliasPath, JSON.stringify(newJson, null, 4));
     return;
   }
   if (hasFile(jsJson) && mode === "sync") {
     const target = genJson(alias, root, prefix);
     const source = getJson(jsJson);
     const newJson = mergeJson(target, source);
-    hasFile(jsJson) && (0, import_fs2.writeFileSync)(jsJson, JSON.stringify(newJson, null, 4));
+    hasFile(jsJson) && (0, import_node_fs2.writeFileSync)(jsJson, JSON.stringify(newJson, null, 4));
   }
   if (hasFile(tsJson) && mode === "sync") {
     const target = genJson(alias, root, prefix);
     const source = getJson(tsJson);
     const newJson = mergeJson(target, source);
-    hasFile(tsJson) && (0, import_fs2.writeFileSync)(tsJson, JSON.stringify(newJson, null, 4));
+    hasFile(tsJson) && (0, import_node_fs2.writeFileSync)(tsJson, JSON.stringify(newJson, null, 4));
   }
 }
 __name(syncJson, "syncJson");
 function excutor(json, path) {
   const newJson = removePath(path, getJson(json));
-  (0, import_fs2.writeFileSync)(json, JSON.stringify(newJson, null, 4));
+  (0, import_node_fs2.writeFileSync)(json, JSON.stringify(newJson, null, 4));
 }
 __name(excutor, "excutor");
 function removeJson({ aliasPath, jsJson, tsJson, unlinkDirName, prefix, mode }) {
@@ -155,13 +167,13 @@ __name(removeJson, "removeJson");
 
 // src/index.ts
 var DEFAULT_CONFIG = {
-  root: (0, import_path3.join)(process.cwd(), "src"),
+  root: (0, import_node_path3.join)(import_node_process2.default.cwd(), "src"),
   prefix: "@",
   mode: "sync",
   aliasPath: null
 };
-var jsconfig = /* @__PURE__ */ __name((root) => (0, import_path3.join)(root, "jsconfig.json"), "jsconfig");
-var tsconfig = /* @__PURE__ */ __name((root) => (0, import_path3.join)(root, "tsconfig.json"), "tsconfig");
+var jsconfig = /* @__PURE__ */ __name((root) => (0, import_node_path3.join)(root, "jsconfig.json"), "jsconfig");
+var tsconfig = /* @__PURE__ */ __name((root) => (0, import_node_path3.join)(root, "tsconfig.json"), "tsconfig");
 function genArrayAlias(dirs, root, prefix) {
   return dirs.reduce((result, item) => {
     result.push({
@@ -199,8 +211,8 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
         const alias = genArrayAlias(dirs, root, prefix);
         syncJson({
           aliasPath,
-          jsJson: jsconfig(process.cwd()),
-          tsJson: tsconfig(process.cwd()),
+          jsJson: jsconfig(import_node_process2.default.cwd()),
+          tsJson: tsconfig(import_node_process2.default.cwd()),
           alias,
           root,
           prefix,
@@ -214,14 +226,14 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
       },
       configureServer(server) {
         server.watcher.on("all", (eventName, path) => {
-          const { dir, name: unlinkDirName } = (0, import_path3.parse)(path);
+          const { dir, name: unlinkDirName } = (0, import_node_path3.parse)(path);
           if (dir === root) {
             if (eventName === "addDir") {
               const alias = genArrayAlias(dirs, root, prefix);
               mode !== "off" && syncJson({
                 aliasPath,
-                jsJson: jsconfig(process.cwd()),
-                tsJson: tsconfig(process.cwd()),
+                jsJson: jsconfig(import_node_process2.default.cwd()),
+                tsJson: tsconfig(import_node_process2.default.cwd()),
                 alias,
                 root,
                 prefix,
@@ -232,8 +244,8 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
             if (eventName === "unlinkDir") {
               mode !== "off" && removeJson({
                 aliasPath,
-                jsJson: jsconfig(process.cwd()),
-                tsJson: tsconfig(process.cwd()),
+                jsJson: jsconfig(import_node_process2.default.cwd()),
+                tsJson: tsconfig(import_node_process2.default.cwd()),
                 unlinkDirName,
                 root,
                 prefix,

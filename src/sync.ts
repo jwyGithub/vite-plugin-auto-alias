@@ -1,5 +1,6 @@
-import { readFileSync, writeFileSync } from 'fs';
-import { parse } from 'path';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { parse } from 'node:path';
+import process from 'node:process';
 import type { Alias } from 'vite';
 import { hasFile } from './shared';
 import type { IJson, IPaths, Mode } from './type';
@@ -7,7 +8,7 @@ import type { IJson, IPaths, Mode } from './type';
 /**
  * @description 获取json
  * @param jsonPath jsonPath
- * @returns
+ * @returns IJson
  */
 export function getJson(jsonPath: string): IJson {
     try {
@@ -60,9 +61,6 @@ export function removePath(pathKey: string, source: IJson): IJson {
 
 /**
  * @description 转换成json path格式
- * @param root string
- * @param param1
- * @returns
  */
 export function convertToJsonPath(
     root: string,
@@ -95,7 +93,7 @@ export function genJson(alias: Alias[], root: string, prefix: string): IJson {
     }, {});
     return {
         compilerOptions: {
-            paths: paths,
+            paths,
             baseUrl: '.'
         }
     };
@@ -113,9 +111,6 @@ export interface ISyncJson {
 
 /**
  * @description 同步json文件
- * @param extendJson 继承的json
- * @param jsJson jsconfig.json
- * @param tsJson tsconfig.json
  */
 export function syncJson({ aliasPath, jsJson, tsJson, alias, prefix, root, mode }: ISyncJson) {
     // 如果存在自定义的aliasPath文件，且mode为sync，则将alias写入到aliasPath文件中
@@ -162,4 +157,3 @@ export function removeJson({ aliasPath, jsJson, tsJson, unlinkDirName, prefix, m
     hasFile(jsJson) && mode === 'sync' && excutor(jsJson, toRemovePath);
     hasFile(tsJson) && mode === 'sync' && excutor(tsJson, toRemovePath);
 }
-

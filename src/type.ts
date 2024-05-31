@@ -1,3 +1,5 @@
+import type { CompilerOptions, MapLike } from 'typescript';
+
 export type Mode = 'sync' | 'off';
 
 export interface AutoAlias {
@@ -12,16 +14,13 @@ export type GetDirs = Array<{
     dirPath: string;
 }>;
 
-export interface IPaths {
-    [key: string]: string[];
-}
+export interface IPaths extends MapLike<string[]> {}
 
 export interface IJson {
     [key: string]: any;
-    compilerOptions: {
-        [key: string]: any;
-        baseUrl: string;
-        paths: IPaths;
-    };
+    compilerOptions: ICompilerOptions;
 }
 
+export type RequiredKeys<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
+
+export type ICompilerOptions = RequiredKeys<CompilerOptions, 'paths'>;

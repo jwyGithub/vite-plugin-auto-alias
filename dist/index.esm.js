@@ -3,6 +3,7 @@ var __name = (target, value) => __defProp(target, "name", { value, configurable:
 
 // src/index.ts
 import { join as join2, parse as parse2 } from "path";
+import process2 from "process";
 
 // src/shared.ts
 import { existsSync, lstatSync, readdirSync } from "fs";
@@ -29,6 +30,7 @@ var getDirs = /* @__PURE__ */ __name((path) => {
 // src/sync.ts
 import { readFileSync, writeFileSync } from "fs";
 import { parse } from "path";
+import process from "process";
 function getJson(jsonPath) {
   try {
     const jsonText = readFileSync(jsonPath, "utf-8");
@@ -134,7 +136,7 @@ __name(removeJson, "removeJson");
 
 // src/index.ts
 var DEFAULT_CONFIG = {
-  root: join2(process.cwd(), "src"),
+  root: join2(process2.cwd(), "src"),
   prefix: "@",
   mode: "sync",
   aliasPath: null
@@ -178,8 +180,8 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
         const alias = genArrayAlias(dirs, root, prefix);
         syncJson({
           aliasPath,
-          jsJson: jsconfig(process.cwd()),
-          tsJson: tsconfig(process.cwd()),
+          jsJson: jsconfig(process2.cwd()),
+          tsJson: tsconfig(process2.cwd()),
           alias,
           root,
           prefix,
@@ -199,8 +201,8 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
               const alias = genArrayAlias(dirs, root, prefix);
               mode !== "off" && syncJson({
                 aliasPath,
-                jsJson: jsconfig(process.cwd()),
-                tsJson: tsconfig(process.cwd()),
+                jsJson: jsconfig(process2.cwd()),
+                tsJson: tsconfig(process2.cwd()),
                 alias,
                 root,
                 prefix,
@@ -211,8 +213,8 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
             if (eventName === "unlinkDir") {
               mode !== "off" && removeJson({
                 aliasPath,
-                jsJson: jsconfig(process.cwd()),
-                tsJson: tsconfig(process.cwd()),
+                jsJson: jsconfig(process2.cwd()),
+                tsJson: tsconfig(process2.cwd()),
                 unlinkDirName,
                 root,
                 prefix,

@@ -132,6 +132,4 @@ import xxx from '@scss/xxx';
 import xxx from '@store/xxx';
 import xxx from '@utils/xxx';
 import xxx from '@views/xxx';
-....
 ```
-
