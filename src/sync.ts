@@ -1,8 +1,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { parse } from 'node:path';
-import process from 'node:process';
 import type { Alias } from 'vite';
-import { hasFile } from './shared';
+import { hasFile, removeComments } from './shared';
 import type { IJson, IPaths, Mode } from './type';
 
 /**
@@ -12,10 +11,15 @@ import type { IJson, IPaths, Mode } from './type';
  */
 export function getJson(jsonPath: string): IJson {
     try {
-        const jsonText = readFileSync(jsonPath, 'utf-8');
+        let jsonText = readFileSync(jsonPath, 'utf-8');
+        jsonText = removeComments(jsonText);
         return JSON.parse(jsonText);
     } catch (error) {
-        process.exit(0);
+        return {
+            compilerOptions: {
+                paths: {}
+            }
+        };
     }
 }
 /**

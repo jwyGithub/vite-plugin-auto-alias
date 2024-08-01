@@ -34,7 +34,7 @@ __export(src_exports, {
 });
 module.exports = __toCommonJS(src_exports);
 var import_node_path3 = require("path");
-var import_node_process2 = __toESM(require("process"), 1);
+var import_node_process = __toESM(require("process"), 1);
 
 // src/shared.ts
 var import_node_fs = require("fs");
@@ -57,17 +57,24 @@ var getDirs = /* @__PURE__ */ __name((path) => {
     return result;
   }, []);
 }, "getDirs");
+var removeComments = /* @__PURE__ */ __name((code) => {
+  return code.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, "");
+}, "removeComments");
 
 // src/sync.ts
 var import_node_fs2 = require("fs");
 var import_node_path2 = require("path");
-var import_node_process = __toESM(require("process"), 1);
 function getJson(jsonPath) {
   try {
-    const jsonText = (0, import_node_fs2.readFileSync)(jsonPath, "utf-8");
+    let jsonText = (0, import_node_fs2.readFileSync)(jsonPath, "utf-8");
+    jsonText = removeComments(jsonText);
     return JSON.parse(jsonText);
   } catch (error) {
-    import_node_process.default.exit(0);
+    return {
+      compilerOptions: {
+        paths: {}
+      }
+    };
   }
 }
 __name(getJson, "getJson");
@@ -167,7 +174,7 @@ __name(removeJson, "removeJson");
 
 // src/index.ts
 var DEFAULT_CONFIG = {
-  root: (0, import_node_path3.join)(import_node_process2.default.cwd(), "src"),
+  root: (0, import_node_path3.join)(import_node_process.default.cwd(), "src"),
   prefix: "@",
   mode: "sync",
   aliasPath: null
@@ -211,8 +218,8 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
         const alias = genArrayAlias(dirs, root, prefix);
         syncJson({
           aliasPath,
-          jsJson: jsconfig(import_node_process2.default.cwd()),
-          tsJson: tsconfig(import_node_process2.default.cwd()),
+          jsJson: jsconfig(import_node_process.default.cwd()),
+          tsJson: tsconfig(import_node_process.default.cwd()),
           alias,
           root,
           prefix,
@@ -232,8 +239,8 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
               const alias = genArrayAlias(dirs, root, prefix);
               mode !== "off" && syncJson({
                 aliasPath,
-                jsJson: jsconfig(import_node_process2.default.cwd()),
-                tsJson: tsconfig(import_node_process2.default.cwd()),
+                jsJson: jsconfig(import_node_process.default.cwd()),
+                tsJson: tsconfig(import_node_process.default.cwd()),
                 alias,
                 root,
                 prefix,
@@ -244,8 +251,8 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
             if (eventName === "unlinkDir") {
               mode !== "off" && removeJson({
                 aliasPath,
-                jsJson: jsconfig(import_node_process2.default.cwd()),
-                tsJson: tsconfig(import_node_process2.default.cwd()),
+                jsJson: jsconfig(import_node_process.default.cwd()),
+                tsJson: tsconfig(import_node_process.default.cwd()),
                 unlinkDirName,
                 root,
                 prefix,

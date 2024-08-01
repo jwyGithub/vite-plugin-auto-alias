@@ -3,7 +3,7 @@ var __name = (target, value) => __defProp(target, "name", { value, configurable:
 
 // src/index.ts
 import { join as join2, parse as parse2 } from "path";
-import process2 from "process";
+import process from "process";
 
 // src/shared.ts
 import { existsSync, lstatSync, readdirSync } from "fs";
@@ -26,17 +26,24 @@ var getDirs = /* @__PURE__ */ __name((path) => {
     return result;
   }, []);
 }, "getDirs");
+var removeComments = /* @__PURE__ */ __name((code) => {
+  return code.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, "");
+}, "removeComments");
 
 // src/sync.ts
 import { readFileSync, writeFileSync } from "fs";
 import { parse } from "path";
-import process from "process";
 function getJson(jsonPath) {
   try {
-    const jsonText = readFileSync(jsonPath, "utf-8");
+    let jsonText = readFileSync(jsonPath, "utf-8");
+    jsonText = removeComments(jsonText);
     return JSON.parse(jsonText);
   } catch (error) {
-    process.exit(0);
+    return {
+      compilerOptions: {
+        paths: {}
+      }
+    };
   }
 }
 __name(getJson, "getJson");
@@ -136,7 +143,7 @@ __name(removeJson, "removeJson");
 
 // src/index.ts
 var DEFAULT_CONFIG = {
-  root: join2(process2.cwd(), "src"),
+  root: join2(process.cwd(), "src"),
   prefix: "@",
   mode: "sync",
   aliasPath: null
@@ -180,8 +187,8 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
         const alias = genArrayAlias(dirs, root, prefix);
         syncJson({
           aliasPath,
-          jsJson: jsconfig(process2.cwd()),
-          tsJson: tsconfig(process2.cwd()),
+          jsJson: jsconfig(process.cwd()),
+          tsJson: tsconfig(process.cwd()),
           alias,
           root,
           prefix,
@@ -201,8 +208,8 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
               const alias = genArrayAlias(dirs, root, prefix);
               mode !== "off" && syncJson({
                 aliasPath,
-                jsJson: jsconfig(process2.cwd()),
-                tsJson: tsconfig(process2.cwd()),
+                jsJson: jsconfig(process.cwd()),
+                tsJson: tsconfig(process.cwd()),
                 alias,
                 root,
                 prefix,
@@ -213,8 +220,8 @@ var src_default = /* @__PURE__ */ __name((options = DEFAULT_CONFIG) => {
             if (eventName === "unlinkDir") {
               mode !== "off" && removeJson({
                 aliasPath,
-                jsJson: jsconfig(process2.cwd()),
-                tsJson: tsconfig(process2.cwd()),
+                jsJson: jsconfig(process.cwd()),
+                tsJson: tsconfig(process.cwd()),
                 unlinkDirName,
                 root,
                 prefix,

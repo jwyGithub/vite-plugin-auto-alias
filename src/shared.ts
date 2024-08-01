@@ -19,3 +19,7 @@ export const getDirs = (path: string): GetDirs => {
         return result;
     }, []);
 };
+
+export const removeComments = (code: string) => {
+    return code.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, '');
+};
