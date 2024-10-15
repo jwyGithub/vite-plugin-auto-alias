@@ -4,35 +4,79 @@
 name: build and publish
 
 on:
-  release:
-    types: [created]
-  pull_request:
-    branches:
-      - master
-  push:
-    branches:
-      - master
+    push:
+        branches:
+            - master
+        paths-ignore:
+            - README.md
+            - packages/**/*.md
+            - LICENSE
+            - .github/**
+            - .vscode/**
+            - .gitignore
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-      - run: npm install
-      - run: npm run build
+    build-and-publish:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org/
-      - run: npm publish --access=public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_PUBLISH}}
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 'latest'
+                  registry-url: 'https://registry.npmjs.org'
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: latest
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Configure git
+              run: |
+                  git config --global user.name "${{ github.actor }}"
+                  git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+            - name: Get version bump
+              id: bump
+              run: |
+                  LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+                  if [[ $LAST_COMMIT_MSG == fix:* ]]; then
+                    echo "type=patch" >> $GITHUB_OUTPUT
+                  elif [[ $LAST_COMMIT_MSG == feat:* ]]; then
+                    echo "type=minor" >> $GITHUB_OUTPUT
+                  elif [[ $LAST_COMMIT_MSG == chore:* ]]; then
+                    echo "type=major" >> $GITHUB_OUTPUT
+                  else
+                    echo "type=patch" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Bump version
+              run: pnpm standard-version --release-as ${{ steps.bump.outputs.type }}
+
+            - name: Push changes
+              run: |
+                  git push --follow-tags origin main
+
+            - name: Build
+              run: pnpm run build
+
+            - name: Lint fix
+              run: pnpm lint:fix
+
+            - name: Lint
+              run: pnpm lint
+
+            - name: Prettier
+              run: pnpm prettier
+
+            - name: Publish to npm
+              run: pnpm publish --no-git-checks
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH }}

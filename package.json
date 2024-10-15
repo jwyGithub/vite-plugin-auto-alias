@@ -29,23 +29,36 @@
     ],
     "scripts": {
         "build": "tsup",
-        "release": "npm run build && bumpp package.json --commit --push && npm publish --access=public",
         "lint": "eslint .",
-        "lint:fix": "eslint . --fix"
+        "lint:fix": "eslint . --fix",
+        "prettier": "pnpx prettier --write .",
+        "lint-staged": "lint-staged",
+        "release": "standard-version"
     },
     "peerDependencies": {
         "vite": "*"
     },
     "devDependencies": {
-        "@jiangweiye/eslint-config": "^0.1.5-beta.3",
-        "@jiangweiye/prettier-config": "^0.0.14",
+        "@jiangweiye/eslint-config": "^0.1.12",
+        "@jiangweiye/prettier-config": "^0.0.18",
         "@jiangweiye/tsconfig": "0.0.11",
         "@swc/core": "^1.5.24",
         "@types/node": "^20.12.13",
         "bumpp": "^9.4.1",
-        "eslint": "^9.3.0",
+        "eslint": "^9.5.0",
+        "lint-staged": "^15.2.10",
+        "standard-version": "^9.5.0",
         "tsup": "^8.0.2",
         "typescript": "^5.4.5",
         "vite": "^5.2.12"
+    },
+    "simple-git-hooks": {
+        "pre-commit": "pnpm lint-staged"
+    },
+    "lint-staged": {
+        "*.{js,ts}": [
+            "pnpm lint",
+            "pnpm prettier"
+        ]
     }
 }
