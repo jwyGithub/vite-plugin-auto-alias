@@ -62,7 +62,7 @@ jobs:
 
             - name: Push changes
               run: |
-                  git push --follow-tags origin main
+                  git push --follow-tags origin master
 
             - name: Build
               run: pnpm run build
