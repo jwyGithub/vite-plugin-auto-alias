@@ -14,7 +14,7 @@ export function getJson(jsonPath: string): IJson {
         let jsonText = readFileSync(jsonPath, 'utf-8');
         jsonText = removeComments(jsonText);
         return JSON.parse(jsonText);
-    } catch (error) {
+    } catch {
         return {
             compilerOptions: {
                 paths: {}

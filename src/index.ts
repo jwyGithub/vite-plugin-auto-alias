@@ -92,7 +92,7 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                     if (dir === root) {
                         if (eventName === 'addDir') {
                             const alias = genArrayAlias(dirs, root, prefix);
-                            mode !== 'off' &&
+                            if (mode !== 'off') {
                                 syncJson({
                                     aliasPath,
                                     jsJson: jsconfig(process.cwd()),
@@ -102,11 +102,12 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                                     prefix,
                                     mode
                                 });
+                            }
                             server.restart();
                         }
 
                         if (eventName === 'unlinkDir') {
-                            mode !== 'off' &&
+                            if (mode !== 'off') {
                                 removeJson({
                                     aliasPath,
                                     jsJson: jsconfig(process.cwd()),
@@ -116,6 +117,7 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                                     prefix,
                                     mode
                                 });
+                            }
                             server.restart();
                         }
                     }

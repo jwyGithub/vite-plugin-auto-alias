@@ -47,6 +47,7 @@
         "bumpp": "^9.4.1",
         "eslint": "^9.5.0",
         "lint-staged": "^15.2.10",
+        "prettier": "^3.3.3",
         "standard-version": "^9.5.0",
         "tsup": "^8.0.2",
         "typescript": "^5.4.5",

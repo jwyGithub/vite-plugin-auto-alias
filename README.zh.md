@@ -70,7 +70,7 @@ export interface AutoAlias {
 
     /**
      * @description json同步模式
-     * @default all
+     * @default sync
      */
     mode?: 'sync' | 'off';
 
