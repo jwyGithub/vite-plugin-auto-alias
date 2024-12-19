@@ -21,5 +21,50 @@ export const getDirs = (path: string): GetDirs => {
 };
 
 export const removeComments = (code: string) => {
-    return code.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, '');
+    if (!code) return code;
+    let inString = false;
+    let inComment = false;
+    let inMultilineComment = false;
+    let newStr = '';
+
+    for (let i = 0; i < code.length; i++) {
+        if (inComment) {
+            if (code[i] === '\n') {
+                inComment = false;
+                newStr += '\n';
+            }
+            continue;
+        }
+
+        if (inMultilineComment) {
+            if (code[i] === '*' && code[i + 1] === '/') {
+                inMultilineComment = false;
+                i++;
+            }
+            continue;
+        }
+
+        if (code[i] === '"' && code[i - 1] !== '\\') {
+            inString = !inString;
+        }
+
+        if (!inString) {
+            if (code[i] === '/' && code[i + 1] === '/') {
+                inComment = true;
+                i++;
+                continue;
+            }
+            if (code[i] === '/' && code[i + 1] === '*') {
+                inMultilineComment = true;
+                i++;
+                continue;
+            }
+        }
+
+        if (!inComment && !inMultilineComment) {
+            newStr += code[i];
+        }
+    }
+
+    return newStr;
 };
