@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.9](https://github.com/jwyGithub/vite-plugin-auto-alias/compare/v1.0.8...v1.0.9) (2024-12-19)
+
+
+### Bug Fixes
+
+* fix removeComments parse error and update vite version ([5f3cf80](https://github.com/jwyGithub/vite-plugin-auto-alias/commit/5f3cf8095383ba2a04f5e474f4034ef432642cb9))
+
 ### [1.0.8](https://github.com/jwyGithub/vite-plugin-auto-alias/compare/v0.2.20...v1.0.8) (2024-10-15)
 
 
