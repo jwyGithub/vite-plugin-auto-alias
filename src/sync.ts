@@ -1,8 +1,8 @@
+import type { Alias } from 'vite';
+import type { IJson, IPaths, Mode } from './type';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { parse } from 'node:path';
-import type { Alias } from 'vite';
 import { hasFile, removeComments } from './shared';
-import type { IJson, IPaths, Mode } from './type';
 
 /**
  * @description 获取json

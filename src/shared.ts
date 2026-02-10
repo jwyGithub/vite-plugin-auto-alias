@@ -1,7 +1,7 @@
+import type { GetDirs } from './type';
 import { existsSync, lstatSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { normalizePath } from 'vite';
-import type { GetDirs } from './type';
 
 export const isDir = (path: string): boolean => {
     return lstatSync(path).isDirectory();

@@ -39,7 +39,7 @@
         "vite": "*"
     },
     "devDependencies": {
-        "@jiangweiye/eslint-config": "^0.1.12",
+        "@jiangweiye/eslint-config": "^0.1.15",
         "@jiangweiye/prettier-config": "^0.0.18",
         "@jiangweiye/tsconfig": "0.0.11",
         "@swc/core": "^1.5.24",

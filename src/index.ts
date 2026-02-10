@@ -1,9 +1,9 @@
+import type { Alias, PluginOption } from 'vite';
+import type { AutoAlias, GetDirs } from './type';
 import { join, parse } from 'node:path';
 import process from 'node:process';
-import type { Alias, PluginOption } from 'vite';
 import { getDirs, hasFile } from './shared';
 import { removeJson, syncJson } from './sync';
-import type { AutoAlias, GetDirs } from './type';
 
 /**
  * @description 默认配置
@@ -11,7 +11,7 @@ import type { AutoAlias, GetDirs } from './type';
 const DEFAULT_CONFIG: Required<AutoAlias> = {
     root: join(process.cwd(), 'src'),
     prefix: '@',
-    mode: 'sync',
+    mode: 'off',
     aliasPath: null
 };
 
@@ -65,12 +65,11 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
     if (!hasFile(root)) {
         return undefined;
     } else {
-        const dirs = getDirs(root);
         return {
             name: 'vite-plugin-auto-alias',
             enforce: 'pre',
             config() {
-                const alias = genArrayAlias(dirs, root, prefix);
+                const alias = genArrayAlias(getDirs(root), root, prefix);
                 syncJson({
                     aliasPath,
                     jsJson: jsconfig(process.cwd()),
@@ -91,7 +90,7 @@ export default (options: AutoAlias = DEFAULT_CONFIG): PluginOption => {
                     const { dir, name: unlinkDirName } = parse(path);
                     if (dir === root) {
                         if (eventName === 'addDir') {
-                            const alias = genArrayAlias(dirs, root, prefix);
+                            const alias = genArrayAlias(getDirs(root), root, prefix);
                             if (mode !== 'off') {
                                 syncJson({
                                     aliasPath,
