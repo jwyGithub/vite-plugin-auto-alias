@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/jwyGithub/vite-plugin-auto-alias/compare/v1.0.9...v2.0.0) (2026-02-10)
+
 ### [1.0.9](https://github.com/jwyGithub/vite-plugin-auto-alias/compare/v1.0.8...v1.0.9) (2024-12-19)
 
 
